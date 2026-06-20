@@ -1,0 +1,386 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Turnkey API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Stamp",
+      "value": "{{stamp}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Organizations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a sub-organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/submit/create_sub_organization",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"type\": \"ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V7\",\n  \"timestampMs\": \"1746736509954\",\n  \"organizationId\": \"<organization-id>\",\n  \"parameters\": {\n    \"subOrganizationName\": \"<string>\",\n    \"rootUsers\": [],\n    \"rootQuorumThreshold\": 1\n  }\n}"
+            }
+          },
+          "docs": "Creates an isolated sub-organization with its own root quorum, users, policies, and optional initial wallet."
+        },
+        {
+          "info": {
+            "name": "Get sub-organizations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/query/get_sub_organizations",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"organizationId\": \"<organization-id>\"\n}"
+            }
+          },
+          "docs": "Lists sub-organizations under a parent organization."
+        },
+        {
+          "info": {
+            "name": "Who am I",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/query/whoami",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"organizationId\": \"<organization-id>\"\n}"
+            }
+          },
+          "docs": "Returns the organization and user associated with the stamping credential."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Wallets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a wallet",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/submit/create_wallet",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"type\": \"ACTIVITY_TYPE_CREATE_WALLET\",\n  \"timestampMs\": \"1746736509954\",\n  \"organizationId\": \"<organization-id>\",\n  \"parameters\": {\n    \"walletName\": \"<string>\",\n    \"accounts\": [\n      {\n        \"curve\": \"CURVE_SECP256K1\",\n        \"pathFormat\": \"PATH_FORMAT_BIP32\",\n        \"path\": \"m/44'/60'/0'/0/0\",\n        \"addressFormat\": \"ADDRESS_FORMAT_ETHEREUM\"\n      }\n    ]\n  }\n}"
+            }
+          },
+          "docs": "Creates an HD wallet and derives the requested wallet accounts."
+        },
+        {
+          "info": {
+            "name": "Create wallet accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/submit/create_wallet_accounts",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"type\": \"ACTIVITY_TYPE_CREATE_WALLET_ACCOUNTS\",\n  \"timestampMs\": \"1746736509954\",\n  \"organizationId\": \"<organization-id>\",\n  \"parameters\": {\n    \"walletId\": \"<wallet-id>\",\n    \"accounts\": []\n  }\n}"
+            }
+          },
+          "docs": "Derives additional wallet accounts from an existing wallet."
+        },
+        {
+          "info": {
+            "name": "List wallets",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/query/list_wallets",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"organizationId\": \"<organization-id>\"\n}"
+            }
+          },
+          "docs": "Lists the wallets in an organization."
+        },
+        {
+          "info": {
+            "name": "Get wallet",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/query/get_wallet",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"organizationId\": \"<organization-id>\",\n  \"walletId\": \"<wallet-id>\"\n}"
+            }
+          },
+          "docs": "Fetches a single wallet by id."
+        },
+        {
+          "info": {
+            "name": "List wallet accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/query/list_wallet_accounts",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"organizationId\": \"<organization-id>\",\n  \"walletId\": \"<wallet-id>\"\n}"
+            }
+          },
+          "docs": "Lists the derived accounts of a wallet."
+        },
+        {
+          "info": {
+            "name": "Export wallet",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/submit/export_wallet",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"type\": \"ACTIVITY_TYPE_EXPORT_WALLET\",\n  \"timestampMs\": \"1746736509954\",\n  \"organizationId\": \"<organization-id>\",\n  \"parameters\": {\n    \"walletId\": \"<wallet-id>\",\n    \"targetPublicKey\": \"<hex>\"\n  }\n}"
+            }
+          },
+          "docs": "Exports a wallet's mnemonic encrypted to a caller-supplied target public key."
+        },
+        {
+          "info": {
+            "name": "Import wallet",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/submit/import_wallet",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"type\": \"ACTIVITY_TYPE_IMPORT_WALLET\",\n  \"timestampMs\": \"1746736509954\",\n  \"organizationId\": \"<organization-id>\",\n  \"parameters\": {\n    \"userId\": \"<user-id>\",\n    \"walletName\": \"<string>\",\n    \"encryptedBundle\": \"<bundle>\",\n    \"accounts\": []\n  }\n}"
+            }
+          },
+          "docs": "Imports an externally generated mnemonic into a wallet."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Private Keys",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create private keys",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/submit/create_private_keys",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"type\": \"ACTIVITY_TYPE_CREATE_PRIVATE_KEYS_V2\",\n  \"timestampMs\": \"1746736509954\",\n  \"organizationId\": \"<organization-id>\",\n  \"parameters\": {\n    \"privateKeys\": []\n  }\n}"
+            }
+          },
+          "docs": "Generates one or more standalone raw private keys inside the enclave."
+        },
+        {
+          "info": {
+            "name": "List private keys",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/query/list_private_keys",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"organizationId\": \"<organization-id>\"\n}"
+            }
+          },
+          "docs": "Lists standalone private keys in an organization."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Signing",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Sign transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/submit/sign_transaction",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"type\": \"ACTIVITY_TYPE_SIGN_TRANSACTION_V2\",\n  \"timestampMs\": \"1746736509954\",\n  \"organizationId\": \"<organization-id>\",\n  \"parameters\": {\n    \"signWith\": \"<address-or-private-key-id>\",\n    \"unsignedTransaction\": \"<hex>\",\n    \"type\": \"TRANSACTION_TYPE_ETHEREUM\"\n  }\n}"
+            }
+          },
+          "docs": "Signs an unsigned transaction with the specified wallet account or private key."
+        },
+        {
+          "info": {
+            "name": "Sign raw payload",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/submit/sign_raw_payload",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"type\": \"ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2\",\n  \"timestampMs\": \"1746736509954\",\n  \"organizationId\": \"<organization-id>\",\n  \"parameters\": {\n    \"signWith\": \"<address-or-private-key-id>\",\n    \"payload\": \"<hex>\",\n    \"encoding\": \"PAYLOAD_ENCODING_HEXADECIMAL\",\n    \"hashFunction\": \"HASH_FUNCTION_KECCAK256\"\n  }\n}"
+            }
+          },
+          "docs": "Signs an arbitrary payload with a wallet account address or private key."
+        },
+        {
+          "info": {
+            "name": "Sign raw payloads",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/submit/sign_raw_payloads",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"type\": \"ACTIVITY_TYPE_SIGN_RAW_PAYLOADS_V2\",\n  \"timestampMs\": \"1746736509954\",\n  \"organizationId\": \"<organization-id>\",\n  \"parameters\": {\n    \"signWith\": \"<address-or-private-key-id>\",\n    \"payloads\": [],\n    \"encoding\": \"PAYLOAD_ENCODING_HEXADECIMAL\",\n    \"hashFunction\": \"HASH_FUNCTION_NO_OP\"\n  }\n}"
+            }
+          },
+          "docs": "Signs a batch of raw payloads with a single key."
+        },
+        {
+          "info": {
+            "name": "Get activity",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/query/get_activity",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"organizationId\": \"<organization-id>\",\n  \"activityId\": \"<activity-id>\"\n}"
+            }
+          },
+          "docs": "Fetches a single activity and its result by id."
+        },
+        {
+          "info": {
+            "name": "List activities",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/query/list_activities",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"organizationId\": \"<organization-id>\"\n}"
+            }
+          },
+          "docs": "Lists activities for an organization with pagination and filters."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Users & Policies",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create users",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/submit/create_users",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"type\": \"ACTIVITY_TYPE_CREATE_USERS_V3\",\n  \"timestampMs\": \"1746736509954\",\n  \"organizationId\": \"<organization-id>\",\n  \"parameters\": {\n    \"users\": []\n  }\n}"
+            }
+          },
+          "docs": "Adds users to an organization with associated API keys and authenticators."
+        },
+        {
+          "info": {
+            "name": "Create authenticators",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/submit/create_authenticators",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"type\": \"ACTIVITY_TYPE_CREATE_AUTHENTICATORS_V2\",\n  \"timestampMs\": \"1746736509954\",\n  \"organizationId\": \"<organization-id>\",\n  \"parameters\": {\n    \"userId\": \"<user-id>\",\n    \"authenticators\": []\n  }\n}"
+            }
+          },
+          "docs": "Registers WebAuthn/passkey authenticators for a user."
+        },
+        {
+          "info": {
+            "name": "Create policies",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/submit/create_policies",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"type\": \"ACTIVITY_TYPE_CREATE_POLICIES\",\n  \"timestampMs\": \"1746736509954\",\n  \"organizationId\": \"<organization-id>\",\n  \"parameters\": {\n    \"policies\": []\n  }\n}"
+            }
+          },
+          "docs": "Adds one or more policies to the policy engine that authorizes activities."
+        },
+        {
+          "info": {
+            "name": "List users",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/query/list_users",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"organizationId\": \"<organization-id>\"\n}"
+            }
+          },
+          "docs": "Lists users in an organization."
+        },
+        {
+          "info": {
+            "name": "List policies",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/query/list_policies",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"organizationId\": \"<organization-id>\"\n}"
+            }
+          },
+          "docs": "Lists policies in an organization."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Turnkey
+providerId: turnkey
+created: '2026-06-20'
+modified: '2026-06-20'
+reconciled: false
+tags:
+- Crypto
+- Wallets
+- Key Management
+- Signing
+- Secure Enclaves
+- Rate Limiting
+- Quotas
+- Throttling
+description: >-
+  Turnkey enforces request rate limits on its public API (api.turnkey.com)
+  and gates activity throughput through plan-level wallet caps and per-month
+  signature allotments rather than a single published RPM figure. Signing and
+  administrative activities are additionally gated by the organization's
+  policy engine and root-quorum consensus, which can hold an activity in a
+  CONSENSUS_NEEDED state. Specific per-endpoint request-per-second limits are
+  not publicly reconciled in this artifact.
+notes: >-
+  Verify any per-endpoint request limits, burst behavior, and Retry-After
+  semantics with Turnkey support / docs during reconciliation; the primary
+  published throughput controls are plan wallet caps and monthly signature
+  quotas on the pricing page.
+sources:
+- https://docs.turnkey.com
+- https://www.turnkey.com/pricing
+responseCodes:
+  throttled: 429
+limits:
+- name: API Request Rate
+  scope: organization
+  metric: requests
+  limit: see provider documentation
+  notes: Per-organization HTTP request rate limiting on api.turnkey.com; specific RPS not publicly published.
+- name: Wallet Cap
+  scope: organization
+  metric: wallets
+  limit: tier-bound (Free 100, PAYG 1,000, Pro 2,000, Enterprise unlimited)
+  notes: Hard cap on number of wallets per organization, set by plan.
+- name: Monthly Free Signatures
+  scope: organization
+  metric: signatures
+  limit: '25'
+  notes: Free tier includes 25 free signatures per month; beyond this, signatures are billed per signature.
+- name: Policy Engine Gating
+  scope: organization
+  metric: activities
+  limit: policy-bound
+  notes: Each submit activity is evaluated against organization policies before execution; denials are not throttling.
+- name: Root Quorum Consensus
+  scope: organization
+  metric: activities
+  limit: quorum-bound
+  notes: Activities requiring consensus pause in ACTIVITY_STATUS_CONSENSUS_NEEDED until the root quorum threshold of approvals is met.
+policies:
+- name: Tiered Caps
+  description: Wallet caps and free-signature allotments increase with plan tier; Enterprise lifts wallet caps entirely.
+- name: Backoff Strategy
+  description: Clients should implement exponential backoff with jitter on HTTP 429 and honor any Retry-After header.
+- name: Stamp Replay Protection
+  description: Each request carries a timestampMs in the stamped body; stale or replayed stamps are rejected.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

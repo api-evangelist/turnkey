@@ -1,0 +1,513 @@
+{
+  "info": {
+    "name": "Turnkey API",
+    "description": {
+      "content": "RPC-style REST API for Turnkey secure wallet infrastructure. All calls are HTTP POST under https://api.turnkey.com/public/v1, split into read-only query endpoints and state-changing submit (activity) endpoints. Every request carries an X-Stamp header: a base64URL-encoded JSON {publicKey, signature, scheme} where signature is a DER+hex signature over the exact JSON POST body. Passkey requests use X-Stamp-Webauthn instead.",
+      "type": "text/plain"
+    },
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.turnkey.com"
+    },
+    {
+      "key": "organizationId",
+      "value": ""
+    },
+    {
+      "key": "stamp",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Organizations",
+      "item": [
+        {
+          "name": "Create a sub-organization",
+          "request": {
+            "url": {
+              "raw": "{{baseUrl}}/public/v1/submit/create_sub_organization",
+              "host": ["{{baseUrl}}"],
+              "path": ["public", "v1", "submit", "create_sub_organization"]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Stamp", "value": "{{stamp}}" }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V7\",\n  \"timestampMs\": \"1746736509954\",\n  \"organizationId\": \"{{organizationId}}\",\n  \"parameters\": {\n    \"subOrganizationName\": \"<string>\",\n    \"rootUsers\": [],\n    \"rootQuorumThreshold\": 1\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Creates an isolated sub-organization with its own root quorum, users, policies, and optional initial wallet."
+          }
+        },
+        {
+          "name": "Get sub-organizations",
+          "request": {
+            "url": {
+              "raw": "{{baseUrl}}/public/v1/query/get_sub_organizations",
+              "host": ["{{baseUrl}}"],
+              "path": ["public", "v1", "query", "get_sub_organizations"]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Stamp", "value": "{{stamp}}" }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"organizationId\": \"{{organizationId}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Lists sub-organizations under a parent organization."
+          }
+        },
+        {
+          "name": "Who am I",
+          "request": {
+            "url": {
+              "raw": "{{baseUrl}}/public/v1/query/whoami",
+              "host": ["{{baseUrl}}"],
+              "path": ["public", "v1", "query", "whoami"]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Stamp", "value": "{{stamp}}" }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"organizationId\": \"{{organizationId}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Returns the organization and user associated with the stamping credential."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Wallets",
+      "item": [
+        {
+          "name": "Create a wallet",
+          "request": {
+            "url": {
+              "raw": "{{baseUrl}}/public/v1/submit/create_wallet",
+              "host": ["{{baseUrl}}"],
+              "path": ["public", "v1", "submit", "create_wallet"]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Stamp", "value": "{{stamp}}" }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"ACTIVITY_TYPE_CREATE_WALLET\",\n  \"timestampMs\": \"1746736509954\",\n  \"organizationId\": \"{{organizationId}}\",\n  \"parameters\": {\n    \"walletName\": \"<string>\",\n    \"accounts\": [\n      {\n        \"curve\": \"CURVE_SECP256K1\",\n        \"pathFormat\": \"PATH_FORMAT_BIP32\",\n        \"path\": \"m/44'/60'/0'/0/0\",\n        \"addressFormat\": \"ADDRESS_FORMAT_ETHEREUM\"\n      }\n    ]\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Creates an HD wallet and derives the requested wallet accounts."
+          }
+        },
+        {
+          "name": "Create wallet accounts",
+          "request": {
+            "url": {
+              "raw": "{{baseUrl}}/public/v1/submit/create_wallet_accounts",
+              "host": ["{{baseUrl}}"],
+              "path": ["public", "v1", "submit", "create_wallet_accounts"]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Stamp", "value": "{{stamp}}" }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"ACTIVITY_TYPE_CREATE_WALLET_ACCOUNTS\",\n  \"timestampMs\": \"1746736509954\",\n  \"organizationId\": \"{{organizationId}}\",\n  \"parameters\": {\n    \"walletId\": \"<wallet-id>\",\n    \"accounts\": []\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Derives additional wallet accounts from an existing wallet."
+          }
+        },
+        {
+          "name": "List wallets",
+          "request": {
+            "url": {
+              "raw": "{{baseUrl}}/public/v1/query/list_wallets",
+              "host": ["{{baseUrl}}"],
+              "path": ["public", "v1", "query", "list_wallets"]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Stamp", "value": "{{stamp}}" }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"organizationId\": \"{{organizationId}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Lists the wallets in an organization."
+          }
+        },
+        {
+          "name": "Get wallet",
+          "request": {
+            "url": {
+              "raw": "{{baseUrl}}/public/v1/query/get_wallet",
+              "host": ["{{baseUrl}}"],
+              "path": ["public", "v1", "query", "get_wallet"]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Stamp", "value": "{{stamp}}" }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"organizationId\": \"{{organizationId}}\",\n  \"walletId\": \"<wallet-id>\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Fetches a single wallet by id."
+          }
+        },
+        {
+          "name": "List wallet accounts",
+          "request": {
+            "url": {
+              "raw": "{{baseUrl}}/public/v1/query/list_wallet_accounts",
+              "host": ["{{baseUrl}}"],
+              "path": ["public", "v1", "query", "list_wallet_accounts"]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Stamp", "value": "{{stamp}}" }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"organizationId\": \"{{organizationId}}\",\n  \"walletId\": \"<wallet-id>\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Lists the derived accounts of a wallet."
+          }
+        },
+        {
+          "name": "Export wallet",
+          "request": {
+            "url": {
+              "raw": "{{baseUrl}}/public/v1/submit/export_wallet",
+              "host": ["{{baseUrl}}"],
+              "path": ["public", "v1", "submit", "export_wallet"]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Stamp", "value": "{{stamp}}" }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"ACTIVITY_TYPE_EXPORT_WALLET\",\n  \"timestampMs\": \"1746736509954\",\n  \"organizationId\": \"{{organizationId}}\",\n  \"parameters\": {\n    \"walletId\": \"<wallet-id>\",\n    \"targetPublicKey\": \"<hex>\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Exports a wallet's mnemonic encrypted to a caller-supplied target public key."
+          }
+        },
+        {
+          "name": "Import wallet",
+          "request": {
+            "url": {
+              "raw": "{{baseUrl}}/public/v1/submit/import_wallet",
+              "host": ["{{baseUrl}}"],
+              "path": ["public", "v1", "submit", "import_wallet"]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Stamp", "value": "{{stamp}}" }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"ACTIVITY_TYPE_IMPORT_WALLET\",\n  \"timestampMs\": \"1746736509954\",\n  \"organizationId\": \"{{organizationId}}\",\n  \"parameters\": {\n    \"userId\": \"<user-id>\",\n    \"walletName\": \"<string>\",\n    \"encryptedBundle\": \"<bundle>\",\n    \"accounts\": []\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Imports an externally generated mnemonic into a wallet."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Private Keys",
+      "item": [
+        {
+          "name": "Create private keys",
+          "request": {
+            "url": {
+              "raw": "{{baseUrl}}/public/v1/submit/create_private_keys",
+              "host": ["{{baseUrl}}"],
+              "path": ["public", "v1", "submit", "create_private_keys"]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Stamp", "value": "{{stamp}}" }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"ACTIVITY_TYPE_CREATE_PRIVATE_KEYS_V2\",\n  \"timestampMs\": \"1746736509954\",\n  \"organizationId\": \"{{organizationId}}\",\n  \"parameters\": {\n    \"privateKeys\": []\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Generates one or more standalone raw private keys inside the enclave."
+          }
+        },
+        {
+          "name": "List private keys",
+          "request": {
+            "url": {
+              "raw": "{{baseUrl}}/public/v1/query/list_private_keys",
+              "host": ["{{baseUrl}}"],
+              "path": ["public", "v1", "query", "list_private_keys"]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Stamp", "value": "{{stamp}}" }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"organizationId\": \"{{organizationId}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Lists standalone private keys in an organization."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Signing",
+      "item": [
+        {
+          "name": "Sign transaction",
+          "request": {
+            "url": {
+              "raw": "{{baseUrl}}/public/v1/submit/sign_transaction",
+              "host": ["{{baseUrl}}"],
+              "path": ["public", "v1", "submit", "sign_transaction"]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Stamp", "value": "{{stamp}}" }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"ACTIVITY_TYPE_SIGN_TRANSACTION_V2\",\n  \"timestampMs\": \"1746736509954\",\n  \"organizationId\": \"{{organizationId}}\",\n  \"parameters\": {\n    \"signWith\": \"<address-or-private-key-id>\",\n    \"unsignedTransaction\": \"<hex>\",\n    \"type\": \"TRANSACTION_TYPE_ETHEREUM\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Signs an unsigned transaction with the specified wallet account or private key."
+          }
+        },
+        {
+          "name": "Sign raw payload",
+          "request": {
+            "url": {
+              "raw": "{{baseUrl}}/public/v1/submit/sign_raw_payload",
+              "host": ["{{baseUrl}}"],
+              "path": ["public", "v1", "submit", "sign_raw_payload"]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Stamp", "value": "{{stamp}}" }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2\",\n  \"timestampMs\": \"1746736509954\",\n  \"organizationId\": \"{{organizationId}}\",\n  \"parameters\": {\n    \"signWith\": \"<address-or-private-key-id>\",\n    \"payload\": \"<hex>\",\n    \"encoding\": \"PAYLOAD_ENCODING_HEXADECIMAL\",\n    \"hashFunction\": \"HASH_FUNCTION_KECCAK256\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Signs an arbitrary payload with a wallet account address or private key."
+          }
+        },
+        {
+          "name": "Sign raw payloads",
+          "request": {
+            "url": {
+              "raw": "{{baseUrl}}/public/v1/submit/sign_raw_payloads",
+              "host": ["{{baseUrl}}"],
+              "path": ["public", "v1", "submit", "sign_raw_payloads"]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Stamp", "value": "{{stamp}}" }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"ACTIVITY_TYPE_SIGN_RAW_PAYLOADS_V2\",\n  \"timestampMs\": \"1746736509954\",\n  \"organizationId\": \"{{organizationId}}\",\n  \"parameters\": {\n    \"signWith\": \"<address-or-private-key-id>\",\n    \"payloads\": [],\n    \"encoding\": \"PAYLOAD_ENCODING_HEXADECIMAL\",\n    \"hashFunction\": \"HASH_FUNCTION_NO_OP\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Signs a batch of raw payloads with a single key."
+          }
+        },
+        {
+          "name": "Get activity",
+          "request": {
+            "url": {
+              "raw": "{{baseUrl}}/public/v1/query/get_activity",
+              "host": ["{{baseUrl}}"],
+              "path": ["public", "v1", "query", "get_activity"]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Stamp", "value": "{{stamp}}" }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"organizationId\": \"{{organizationId}}\",\n  \"activityId\": \"<activity-id>\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Fetches a single activity and its result by id."
+          }
+        },
+        {
+          "name": "List activities",
+          "request": {
+            "url": {
+              "raw": "{{baseUrl}}/public/v1/query/list_activities",
+              "host": ["{{baseUrl}}"],
+              "path": ["public", "v1", "query", "list_activities"]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Stamp", "value": "{{stamp}}" }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"organizationId\": \"{{organizationId}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Lists activities for an organization with pagination and filters."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users & Policies",
+      "item": [
+        {
+          "name": "Create users",
+          "request": {
+            "url": {
+              "raw": "{{baseUrl}}/public/v1/submit/create_users",
+              "host": ["{{baseUrl}}"],
+              "path": ["public", "v1", "submit", "create_users"]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Stamp", "value": "{{stamp}}" }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"ACTIVITY_TYPE_CREATE_USERS_V3\",\n  \"timestampMs\": \"1746736509954\",\n  \"organizationId\": \"{{organizationId}}\",\n  \"parameters\": {\n    \"users\": []\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Adds users to an organization with associated API keys and authenticators."
+          }
+        },
+        {
+          "name": "Create authenticators",
+          "request": {
+            "url": {
+              "raw": "{{baseUrl}}/public/v1/submit/create_authenticators",
+              "host": ["{{baseUrl}}"],
+              "path": ["public", "v1", "submit", "create_authenticators"]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Stamp", "value": "{{stamp}}" }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"ACTIVITY_TYPE_CREATE_AUTHENTICATORS_V2\",\n  \"timestampMs\": \"1746736509954\",\n  \"organizationId\": \"{{organizationId}}\",\n  \"parameters\": {\n    \"userId\": \"<user-id>\",\n    \"authenticators\": []\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Registers WebAuthn/passkey authenticators for a user."
+          }
+        },
+        {
+          "name": "Create policies",
+          "request": {
+            "url": {
+              "raw": "{{baseUrl}}/public/v1/submit/create_policies",
+              "host": ["{{baseUrl}}"],
+              "path": ["public", "v1", "submit", "create_policies"]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Stamp", "value": "{{stamp}}" }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"ACTIVITY_TYPE_CREATE_POLICIES\",\n  \"timestampMs\": \"1746736509954\",\n  \"organizationId\": \"{{organizationId}}\",\n  \"parameters\": {\n    \"policies\": []\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Adds one or more policies to the policy engine that authorizes activities."
+          }
+        },
+        {
+          "name": "List users",
+          "request": {
+            "url": {
+              "raw": "{{baseUrl}}/public/v1/query/list_users",
+              "host": ["{{baseUrl}}"],
+              "path": ["public", "v1", "query", "list_users"]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Stamp", "value": "{{stamp}}" }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"organizationId\": \"{{organizationId}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Lists users in an organization."
+          }
+        },
+        {
+          "name": "List policies",
+          "request": {
+            "url": {
+              "raw": "{{baseUrl}}/public/v1/query/list_policies",
+              "host": ["{{baseUrl}}"],
+              "path": ["public", "v1", "query", "list_policies"]
+            },
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Stamp", "value": "{{stamp}}" }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"organizationId\": \"{{organizationId}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Lists policies in an organization."
+          }
+        }
+      ]
+    }
+  ]
+}

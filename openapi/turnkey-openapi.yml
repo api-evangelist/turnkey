@@ -1,0 +1,779 @@
+openapi: 3.0.1
+info:
+  title: Turnkey API
+  description: >-
+    Turnkey is secure wallet infrastructure: an API-first key-management and
+    signing platform that generates private keys and signs payloads inside
+    verifiable secure enclaves (TEEs). The public API is an RPC-style REST API
+    under https://api.turnkey.com/public/v1 split into two families - read-only
+    `query` endpoints and state-changing `submit` activity endpoints. Every
+    request is an HTTP POST carrying an `X-Stamp` (or `X-Stamp-Webauthn`)
+    header containing a digital signature over the exact JSON POST body. The
+    stamp is verified by Turnkey's secure enclaves before the request is
+    processed and checked against the organization's policy engine.
+  termsOfService: https://www.turnkey.com/legal/terms
+  contact:
+    name: Turnkey Support
+    url: https://docs.turnkey.com
+  version: '1.0'
+servers:
+  - url: https://api.turnkey.com
+security:
+  - apiStamp: []
+tags:
+  - name: Organizations
+    description: Root organization and sub-organization management.
+  - name: Wallets
+    description: HD wallets and wallet accounts.
+  - name: Private Keys
+    description: Standalone raw private keys.
+  - name: Signing
+    description: Transaction and raw payload signing activities.
+  - name: Users & Policies
+    description: Users, authenticators, API keys, and the policy engine.
+paths:
+  /public/v1/submit/create_sub_organization:
+    post:
+      operationId: createSubOrganization
+      tags:
+        - Organizations
+      summary: Create a sub-organization
+      description: >-
+        Creates an isolated sub-organization with its own root users, root
+        quorum, and optionally an initial wallet. Submitted as an activity of
+        type ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V7.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSubOrganizationRequest'
+      responses:
+        '200':
+          description: Activity accepted/completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityResponse'
+  /public/v1/submit/create_wallet:
+    post:
+      operationId: createWallet
+      tags:
+        - Wallets
+      summary: Create a wallet
+      description: >-
+        Creates an HD wallet and derives the requested wallet accounts.
+        Submitted as an activity of type ACTIVITY_TYPE_CREATE_WALLET.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWalletRequest'
+      responses:
+        '200':
+          description: Activity accepted/completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityResponse'
+  /public/v1/submit/create_wallet_accounts:
+    post:
+      operationId: createWalletAccounts
+      tags:
+        - Wallets
+      summary: Create wallet accounts
+      description: >-
+        Derives additional wallet accounts from an existing wallet. Activity
+        type ACTIVITY_TYPE_CREATE_WALLET_ACCOUNTS.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWalletAccountsRequest'
+      responses:
+        '200':
+          description: Activity accepted/completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityResponse'
+  /public/v1/submit/create_private_keys:
+    post:
+      operationId: createPrivateKeys
+      tags:
+        - Private Keys
+      summary: Create private keys
+      description: >-
+        Generates one or more standalone raw private keys inside the enclave.
+        Activity type ACTIVITY_TYPE_CREATE_PRIVATE_KEYS_V2.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitActivityEnvelope'
+      responses:
+        '200':
+          description: Activity accepted/completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityResponse'
+  /public/v1/submit/sign_transaction:
+    post:
+      operationId: signTransaction
+      tags:
+        - Signing
+      summary: Sign a transaction
+      description: >-
+        Signs an unsigned transaction with the specified wallet account or
+        private key. Synchronous signing activity of type
+        ACTIVITY_TYPE_SIGN_TRANSACTION_V2, policy-checked before execution.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignTransactionRequest'
+      responses:
+        '200':
+          description: Signing activity completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityResponse'
+  /public/v1/submit/sign_raw_payload:
+    post:
+      operationId: signRawPayload
+      tags:
+        - Signing
+      summary: Sign a raw payload
+      description: >-
+        Signs an arbitrary payload with a wallet account address or private
+        key, with selectable encoding and hash function. Activity type
+        ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignRawPayloadRequest'
+      responses:
+        '200':
+          description: Signing activity completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityResponse'
+  /public/v1/submit/sign_raw_payloads:
+    post:
+      operationId: signRawPayloads
+      tags:
+        - Signing
+      summary: Sign multiple raw payloads
+      description: >-
+        Signs a batch of raw payloads with a single key. Activity type
+        ACTIVITY_TYPE_SIGN_RAW_PAYLOADS_V2.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitActivityEnvelope'
+      responses:
+        '200':
+          description: Signing activity completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityResponse'
+  /public/v1/submit/create_policies:
+    post:
+      operationId: createPolicies
+      tags:
+        - Users & Policies
+      summary: Create policies
+      description: >-
+        Adds one or more policies to the policy engine that authorizes
+        activities. Activity type ACTIVITY_TYPE_CREATE_POLICIES.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitActivityEnvelope'
+      responses:
+        '200':
+          description: Activity accepted/completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityResponse'
+  /public/v1/submit/create_users:
+    post:
+      operationId: createUsers
+      tags:
+        - Users & Policies
+      summary: Create users
+      description: >-
+        Adds users to an organization with associated API keys and
+        authenticators. Activity type ACTIVITY_TYPE_CREATE_USERS_V3.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitActivityEnvelope'
+      responses:
+        '200':
+          description: Activity accepted/completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityResponse'
+  /public/v1/submit/create_authenticators:
+    post:
+      operationId: createAuthenticators
+      tags:
+        - Users & Policies
+      summary: Create authenticators
+      description: >-
+        Registers WebAuthn/passkey authenticators for a user. Activity type
+        ACTIVITY_TYPE_CREATE_AUTHENTICATORS_V2.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitActivityEnvelope'
+      responses:
+        '200':
+          description: Activity accepted/completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityResponse'
+  /public/v1/submit/export_wallet:
+    post:
+      operationId: exportWallet
+      tags:
+        - Wallets
+      summary: Export a wallet
+      description: >-
+        Exports a wallet's mnemonic encrypted to a caller-supplied target
+        public key. Activity type ACTIVITY_TYPE_EXPORT_WALLET.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitActivityEnvelope'
+      responses:
+        '200':
+          description: Activity accepted/completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityResponse'
+  /public/v1/submit/import_wallet:
+    post:
+      operationId: importWallet
+      tags:
+        - Wallets
+      summary: Import a wallet
+      description: >-
+        Imports an externally generated mnemonic into a wallet. Activity type
+        ACTIVITY_TYPE_IMPORT_WALLET.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitActivityEnvelope'
+      responses:
+        '200':
+          description: Activity accepted/completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityResponse'
+  /public/v1/query/get_activity:
+    post:
+      operationId: getActivity
+      tags:
+        - Signing
+      summary: Get an activity
+      description: Fetches a single activity and its result by id.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetActivityRequest'
+      responses:
+        '200':
+          description: Activity.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityResponse'
+  /public/v1/query/list_activities:
+    post:
+      operationId: listActivities
+      tags:
+        - Signing
+      summary: List activities
+      description: Lists activities for an organization with pagination and filters.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationScopedQuery'
+      responses:
+        '200':
+          description: List of activities.
+          content:
+            application/json:
+              schema:
+                type: object
+  /public/v1/query/list_wallets:
+    post:
+      operationId: listWallets
+      tags:
+        - Wallets
+      summary: List wallets
+      description: Lists the wallets in an organization.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationScopedQuery'
+      responses:
+        '200':
+          description: List of wallets.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListWalletsResponse'
+  /public/v1/query/get_wallet:
+    post:
+      operationId: getWallet
+      tags:
+        - Wallets
+      summary: Get a wallet
+      description: Fetches a single wallet by id.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetWalletRequest'
+      responses:
+        '200':
+          description: Wallet.
+          content:
+            application/json:
+              schema:
+                type: object
+  /public/v1/query/list_wallet_accounts:
+    post:
+      operationId: listWalletAccounts
+      tags:
+        - Wallets
+      summary: List wallet accounts
+      description: Lists the derived accounts of a wallet.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListWalletAccountsRequest'
+      responses:
+        '200':
+          description: List of wallet accounts.
+          content:
+            application/json:
+              schema:
+                type: object
+  /public/v1/query/list_private_keys:
+    post:
+      operationId: listPrivateKeys
+      tags:
+        - Private Keys
+      summary: List private keys
+      description: Lists standalone private keys in an organization.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationScopedQuery'
+      responses:
+        '200':
+          description: List of private keys.
+          content:
+            application/json:
+              schema:
+                type: object
+  /public/v1/query/list_users:
+    post:
+      operationId: listUsers
+      tags:
+        - Users & Policies
+      summary: List users
+      description: Lists users in an organization.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationScopedQuery'
+      responses:
+        '200':
+          description: List of users.
+          content:
+            application/json:
+              schema:
+                type: object
+  /public/v1/query/list_policies:
+    post:
+      operationId: listPolicies
+      tags:
+        - Users & Policies
+      summary: List policies
+      description: Lists policies in an organization.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationScopedQuery'
+      responses:
+        '200':
+          description: List of policies.
+          content:
+            application/json:
+              schema:
+                type: object
+  /public/v1/query/whoami:
+    post:
+      operationId: whoami
+      tags:
+        - Users & Policies
+      summary: Who am I
+      description: >-
+        Returns the organization and user associated with the stamping
+        credential of the request.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WhoamiRequest'
+      responses:
+        '200':
+          description: Caller identity.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WhoamiResponse'
+components:
+  securitySchemes:
+    apiStamp:
+      type: apiKey
+      in: header
+      name: X-Stamp
+      description: >-
+        Base64URL-encoded JSON stamp `{publicKey, signature, scheme}` where
+        `signature` is a DER-encoded, hex-encoded signature over the exact JSON
+        POST body produced by the registered API key. `scheme` is one of
+        SIGNATURE_SCHEME_TK_API_P256, SIGNATURE_SCHEME_TK_API_SECP256K1,
+        SIGNATURE_SCHEME_TK_API_ED25519, or
+        SIGNATURE_SCHEME_TK_API_SECP256K1_EIP191. Passkey-stamped requests use
+        the alternate `X-Stamp-Webauthn` header carrying a WebAuthn assertion
+        `{credentialId, authenticatorData, clientDataJson, signature}` (plain
+        JSON, not base64URL-encoded) over a SHA256 hash of the POST body.
+    webauthnStamp:
+      type: apiKey
+      in: header
+      name: X-Stamp-Webauthn
+      description: >-
+        Plain-JSON WebAuthn assertion stamp for passkey-authenticated requests.
+  schemas:
+    SubmitActivityEnvelope:
+      type: object
+      description: >-
+        Common envelope for all submit (mutation) activities. The `type`
+        selects the activity and `parameters` carries the activity-specific
+        body.
+      required:
+        - type
+        - timestampMs
+        - organizationId
+        - parameters
+      properties:
+        type:
+          type: string
+          description: The ACTIVITY_TYPE_* discriminator for this activity.
+          example: ACTIVITY_TYPE_CREATE_WALLET
+        timestampMs:
+          type: string
+          description: Client timestamp in milliseconds, replay-protected.
+          example: '1746736509954'
+        organizationId:
+          type: string
+          description: The organization or sub-organization id the activity targets.
+        parameters:
+          type: object
+          description: Activity-specific parameters.
+    OrganizationScopedQuery:
+      type: object
+      required:
+        - organizationId
+      properties:
+        organizationId:
+          type: string
+    CreateSubOrganizationRequest:
+      allOf:
+        - $ref: '#/components/schemas/SubmitActivityEnvelope'
+        - type: object
+          properties:
+            parameters:
+              $ref: '#/components/schemas/CreateSubOrganizationParams'
+    CreateSubOrganizationParams:
+      type: object
+      required:
+        - subOrganizationName
+        - rootUsers
+        - rootQuorumThreshold
+      properties:
+        subOrganizationName:
+          type: string
+        rootUsers:
+          type: array
+          items:
+            type: object
+        rootQuorumThreshold:
+          type: integer
+        wallet:
+          type: object
+          description: Optional initial wallet to create with the sub-organization.
+    CreateWalletRequest:
+      allOf:
+        - $ref: '#/components/schemas/SubmitActivityEnvelope'
+        - type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - ACTIVITY_TYPE_CREATE_WALLET
+            parameters:
+              $ref: '#/components/schemas/CreateWalletParams'
+    CreateWalletParams:
+      type: object
+      required:
+        - walletName
+        - accounts
+      properties:
+        walletName:
+          type: string
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/WalletAccountParams'
+        mnemonicLength:
+          type: integer
+          enum: [12, 15, 18, 21, 24]
+          default: 12
+    CreateWalletAccountsRequest:
+      allOf:
+        - $ref: '#/components/schemas/SubmitActivityEnvelope'
+        - type: object
+          properties:
+            parameters:
+              type: object
+              required:
+                - walletId
+                - accounts
+              properties:
+                walletId:
+                  type: string
+                accounts:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/WalletAccountParams'
+    WalletAccountParams:
+      type: object
+      required:
+        - curve
+        - pathFormat
+        - path
+        - addressFormat
+      properties:
+        curve:
+          type: string
+          enum:
+            - CURVE_SECP256K1
+            - CURVE_ED25519
+            - CURVE_P256
+        pathFormat:
+          type: string
+          enum:
+            - PATH_FORMAT_BIP32
+        path:
+          type: string
+          example: m/44'/60'/0'/0/0
+        addressFormat:
+          type: string
+          example: ADDRESS_FORMAT_ETHEREUM
+    SignTransactionRequest:
+      allOf:
+        - $ref: '#/components/schemas/SubmitActivityEnvelope'
+        - type: object
+          properties:
+            parameters:
+              type: object
+              required:
+                - signWith
+                - unsignedTransaction
+                - type
+              properties:
+                signWith:
+                  type: string
+                  description: Wallet account address or private key id to sign with.
+                unsignedTransaction:
+                  type: string
+                  description: Hex-encoded unsigned transaction.
+                type:
+                  type: string
+                  enum:
+                    - TRANSACTION_TYPE_ETHEREUM
+                    - TRANSACTION_TYPE_SOLANA
+                    - TRANSACTION_TYPE_TRON
+    SignRawPayloadRequest:
+      allOf:
+        - $ref: '#/components/schemas/SubmitActivityEnvelope'
+        - type: object
+          properties:
+            parameters:
+              type: object
+              required:
+                - signWith
+                - payload
+                - encoding
+                - hashFunction
+              properties:
+                signWith:
+                  type: string
+                payload:
+                  type: string
+                encoding:
+                  type: string
+                  enum:
+                    - PAYLOAD_ENCODING_HEXADECIMAL
+                    - PAYLOAD_ENCODING_TEXT_UTF8
+                hashFunction:
+                  type: string
+                  enum:
+                    - HASH_FUNCTION_NO_OP
+                    - HASH_FUNCTION_SHA256
+                    - HASH_FUNCTION_KECCAK256
+                    - HASH_FUNCTION_NOT_APPLICABLE
+    GetActivityRequest:
+      type: object
+      required:
+        - organizationId
+        - activityId
+      properties:
+        organizationId:
+          type: string
+        activityId:
+          type: string
+    GetWalletRequest:
+      type: object
+      required:
+        - organizationId
+        - walletId
+      properties:
+        organizationId:
+          type: string
+        walletId:
+          type: string
+    ListWalletAccountsRequest:
+      type: object
+      required:
+        - organizationId
+        - walletId
+      properties:
+        organizationId:
+          type: string
+        walletId:
+          type: string
+        paginationOptions:
+          type: object
+    WhoamiRequest:
+      type: object
+      required:
+        - organizationId
+      properties:
+        organizationId:
+          type: string
+    WhoamiResponse:
+      type: object
+      properties:
+        organizationId:
+          type: string
+        organizationName:
+          type: string
+        userId:
+          type: string
+        username:
+          type: string
+    ListWalletsResponse:
+      type: object
+      properties:
+        wallets:
+          type: array
+          items:
+            type: object
+            properties:
+              walletId:
+                type: string
+              walletName:
+                type: string
+              createdAt:
+                type: object
+              updatedAt:
+                type: object
+    ActivityResponse:
+      type: object
+      description: Standard activity envelope returned by submit and query endpoints.
+      properties:
+        activity:
+          type: object
+          properties:
+            id:
+              type: string
+            organizationId:
+              type: string
+            status:
+              type: string
+              enum:
+                - ACTIVITY_STATUS_CREATED
+                - ACTIVITY_STATUS_PENDING
+                - ACTIVITY_STATUS_COMPLETED
+                - ACTIVITY_STATUS_FAILED
+                - ACTIVITY_STATUS_CONSENSUS_NEEDED
+                - ACTIVITY_STATUS_REJECTED
+            type:
+              type: string
+            result:
+              type: object
+              description: >-
+                Activity-specific result, e.g. createWalletResult
+                {walletId, addresses[]} or signTransactionResult
+                {signedTransaction} or signRawPayloadResult {r, s, v}.

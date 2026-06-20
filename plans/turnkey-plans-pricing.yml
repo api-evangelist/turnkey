@@ -1,0 +1,173 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Turnkey
+providerId: turnkey
+created: '2026-06-20'
+modified: '2026-06-20'
+reconciled: true
+tags:
+- Crypto
+- Wallets
+- Key Management
+- Signing
+- Secure Enclaves
+- Plans
+description: >-
+  Turnkey prices its wallet infrastructure primarily per signature (per
+  transaction), with tiered plans that bundle a wallet cap and a declining
+  per-signature rate. A Free tier includes 100 wallets and 25 free signatures
+  per month with full auth (passkeys, OAuth, email, API keys), policies, and
+  multi-chain support. Pay-as-you-go is $0.10 per signature; the Pro plan is
+  $99/month minimum with a lower per-signature rate; Enterprise negotiates
+  per-signature rates as low as $0.0015 with unlimited wallets.
+notes: >-
+  Rates and caps as published on the Turnkey pricing page; verify current
+  values at https://www.turnkey.com/pricing during reconciliation.
+sources:
+- https://www.turnkey.com/pricing
+- https://docs.turnkey.com
+plans:
+- id: turnkey-free
+  name: Free
+  type: free
+  description: >-
+    Zero-cost entry tier with 100 wallets and 25 free signatures per month,
+    including passkeys, OAuth, email auth, API keys, policies, multi-chain
+    support, and private key import/export.
+  entries:
+  - label: Wallets
+    name: wallets
+    type: limit
+    metric: wallets
+    limit: 100
+    timeFrame: ongoing
+    geo: global
+    unit: 1
+    price: included
+    userMultiplied: false
+  - label: Free Signatures
+    name: signatures_free
+    type: usage
+    metric: signatures
+    limit: 25
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $0.00 (first 25 / month)
+    userMultiplied: false
+  elements:
+  - name: Passkeys
+  - name: OAuth
+  - name: Email Authentication
+  - name: API Keys
+  - name: Policies
+  - name: Multi-Chain Support
+  - name: Import / Export Private Keys
+- id: turnkey-pay-as-you-go
+  name: Pay as You Go
+  type: usage
+  description: >-
+    Usage tier billed per signature beyond the free allotment, with a 1,000
+    wallet cap and added transaction management and real-time balances.
+  entries:
+  - label: Wallets
+    name: wallets
+    type: limit
+    metric: wallets
+    limit: 1000
+    timeFrame: ongoing
+    geo: global
+    unit: 1
+    price: included
+    userMultiplied: false
+  - label: Signatures
+    name: signatures
+    type: usage
+    metric: signatures
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $0.10 per signature
+    userMultiplied: false
+  elements:
+  - name: Transaction Management
+  - name: Real-Time Balances
+- id: turnkey-pro
+  name: Pro
+  type: paid
+  description: >-
+    $99/month minimum tier with a reduced per-signature rate and a 2,000
+    wallet cap, including all lower-tier features.
+  entries:
+  - label: Monthly Minimum
+    name: minimum
+    type: flat
+    metric: subscription
+    limit: 1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $99 / month minimum
+    userMultiplied: false
+  - label: Wallets
+    name: wallets
+    type: limit
+    metric: wallets
+    limit: 2000
+    timeFrame: ongoing
+    geo: global
+    unit: 1
+    price: included
+    userMultiplied: false
+  - label: Signatures
+    name: signatures
+    type: usage
+    metric: signatures
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $0.05 per signature
+    userMultiplied: false
+  elements:
+  - name: Transaction Management
+  - name: Real-Time Balances
+- id: turnkey-enterprise
+  name: Enterprise
+  type: enterprise
+  description: >-
+    Custom pricing with unlimited wallets, per-signature rates as low as
+    $0.0015, dedicated support, SLAs, custom email templates and domains, SMS
+    authentication, and early access to new features. Contact Turnkey sales.
+  entries:
+  - label: Wallets
+    name: wallets
+    type: limit
+    metric: wallets
+    limit: -1
+    timeFrame: ongoing
+    geo: global
+    unit: 1
+    price: unlimited
+    userMultiplied: false
+  - label: Signatures
+    name: signatures
+    type: usage
+    metric: signatures
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: as low as $0.0015 per signature
+    userMultiplied: false
+  elements:
+  - name: Dedicated Support
+  - name: SLAs
+  - name: Custom Email Templates & Domains
+  - name: SMS Authentication
+  - name: Early Access to New Features
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

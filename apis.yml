@@ -1,0 +1,144 @@
+aid: turnkey
+url: https://raw.githubusercontent.com/api-evangelist/turnkey/refs/heads/main/apis.yml
+name: Turnkey
+kind: company
+description: Turnkey is secure wallet infrastructure and a key-management / signing
+  platform for crypto. Its API-first platform runs private key generation and signing
+  inside verifiable secure enclaves (TEEs), exposing an RPC-style REST API for
+  organizations and sub-organizations, wallets and wallet accounts, raw private
+  keys, users, policies, and authenticators. Every request is cryptographically
+  stamped (P-256 / API-key or passkey signature) and verified before execution.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Crypto
+- Wallets
+- Key Management
+- Signing
+- Secure Enclaves
+created: '2026-06-20'
+modified: '2026-06-20'
+specificationVersion: '0.19'
+apis:
+- aid: turnkey:turnkey-organizations-api
+  name: Turnkey Organizations & Sub-Organizations API
+  tags:
+  - Organizations
+  - Sub-Organizations
+  - Tenancy
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.turnkey.com/concepts/organizations
+  baseURL: https://api.turnkey.com/public/v1
+  properties:
+  - url: https://docs.turnkey.com/concepts/sub-organizations
+    type: Documentation
+  - url: https://docs.turnkey.com/api-reference/activities/create-sub-organization
+    type: APIReference
+  - url: openapi/turnkey-openapi.yml
+    type: OpenAPI
+  - url: collections/turnkey.postman_collection.json
+    type: Postman
+  description: Create and manage the root organization and isolated sub-organizations,
+    each with their own root quorum, users, policies, and wallets. The primary
+    multi-tenant primitive for embedding wallets per end user.
+- aid: turnkey:turnkey-wallets-api
+  name: Turnkey Wallets API
+  tags:
+  - Wallets
+  - Wallet Accounts
+  - HD Wallets
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.turnkey.com/concepts/wallets
+  baseURL: https://api.turnkey.com/public/v1
+  properties:
+  - url: https://docs.turnkey.com/concepts/wallets
+    type: Documentation
+  - url: https://docs.turnkey.com/api-reference/activities/create-wallet
+    type: APIReference
+  - url: openapi/turnkey-openapi.yml
+    type: OpenAPI
+  - url: collections/turnkey.postman_collection.json
+    type: Postman
+  description: Create HD wallets and derive multi-chain wallet accounts across
+    secp256k1, ed25519, and P-256 curves (Ethereum, Bitcoin, Solana, and more),
+    plus import and export of seed phrases inside the secure enclave.
+- aid: turnkey:turnkey-private-keys-api
+  name: Turnkey Private Keys API
+  tags:
+  - Private Keys
+  - Import
+  - Export
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.turnkey.com/concepts/private-keys
+  baseURL: https://api.turnkey.com/public/v1
+  properties:
+  - url: https://docs.turnkey.com/concepts/private-keys
+    type: Documentation
+  - url: https://docs.turnkey.com/api-reference/activities/create-private-keys
+    type: APIReference
+  - url: openapi/turnkey-openapi.yml
+    type: OpenAPI
+  - url: collections/turnkey.postman_collection.json
+    type: Postman
+  description: Generate, tag, import, and export standalone raw private keys
+    managed inside Turnkey's secure enclaves, independent of HD wallet
+    derivation, with curve and address-format selection.
+- aid: turnkey:turnkey-signing-activities-api
+  name: Turnkey Signing & Activities API
+  tags:
+  - Signing
+  - Transactions
+  - Activities
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.turnkey.com/api-reference/activities/overview
+  baseURL: https://api.turnkey.com/public/v1
+  properties:
+  - url: https://docs.turnkey.com/concepts/policies/overview
+    type: Documentation
+  - url: https://docs.turnkey.com/api-reference/activities/sign-transaction
+    type: APIReference
+  - url: openapi/turnkey-openapi.yml
+    type: OpenAPI
+  - url: collections/turnkey.postman_collection.json
+    type: Postman
+  description: Sign transactions and raw payloads (sign_transaction,
+    sign_raw_payload, sign_raw_payloads) with a wallet account or private key,
+    policy-checked and executed as activities; query activity status and results.
+- aid: turnkey:turnkey-users-policies-auth-api
+  name: Turnkey Users, Policies & Authenticators API
+  tags:
+  - Users
+  - Policies
+  - Authenticators
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.turnkey.com/concepts/users/introduction
+  baseURL: https://api.turnkey.com/public/v1
+  properties:
+  - url: https://docs.turnkey.com/concepts/policies/overview
+    type: Documentation
+  - url: https://docs.turnkey.com/api-reference/activities/create-policies
+    type: APIReference
+  - url: openapi/turnkey-openapi.yml
+    type: OpenAPI
+  - url: collections/turnkey.postman_collection.json
+    type: Postman
+  description: Manage users, API keys, passkey/WebAuthn authenticators, OAuth
+    providers, and the policy engine that authorizes every signing and
+    administrative activity against the organization's root quorum.
+common:
+- type: GitHubOrganization
+  url: https://github.com/tkhq
+- type: LinkedIn
+  url: https://www.linkedin.com/company/turnkeyhq
+- type: Website
+  url: https://www.turnkey.com
+- type: Documentation
+  url: https://docs.turnkey.com
+- type: Plans
+  url: plans/turnkey-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/turnkey-rate-limits.yml
+- type: FinOps
+  url: finops/turnkey-finops.yml
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

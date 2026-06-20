@@ -1,0 +1,106 @@
+aid: turnkey
+name: Turnkey
+review:
+  question: Does Turnkey expose a documented public WebSocket API?
+  answer: false
+  date: '2026-06-20'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    No AsyncAPI document was created. Turnkey's public API is an RPC-style
+    REST API of HTTP POST requests under https://api.turnkey.com/public/v1.
+    No WebSocket (ws:// or wss://) and no HTTP Server-Sent Events (SSE)
+    streaming transport is documented. Mutations are modeled as asynchronous
+    "activities" that are polled via /public/v1/query/get_activity, not
+    streamed, so there is no event-driven surface to model.
+findings:
+  summary: |
+    Turnkey does not publish a documented public WebSocket or streaming API.
+    Every API call is an HTTP POST to https://api.turnkey.com/public/v1,
+    split into read-only `query/*` endpoints and state-changing `submit/*`
+    activity endpoints. The defining characteristic of the API is request
+    stamping: each request carries an `X-Stamp` header (base64URL-encoded
+    JSON `{publicKey, signature, scheme}`, a DER+hex signature over the exact
+    JSON POST body) or, for passkeys, an `X-Stamp-Webauthn` header (plain
+    JSON WebAuthn assertion over a SHA256 hash of the body). Stamps are
+    verified inside Turnkey's secure enclaves (TEEs) and the activity is then
+    evaluated by the organization's policy engine and root quorum before
+    execution. Most submit activities are asynchronous and resolved by
+    polling get_activity; private-key signing endpoints (sign_transaction,
+    sign_raw_payload) complete synchronously.
+  authentication:
+    model: Request Stamping
+    headers:
+      - name: X-Stamp
+        encoding: base64URL-encoded JSON {publicKey, signature, scheme}
+        signature: DER-encoded then hex-encoded signature over the exact JSON POST body
+        schemes:
+          - SIGNATURE_SCHEME_TK_API_P256
+          - SIGNATURE_SCHEME_TK_API_SECP256K1
+          - SIGNATURE_SCHEME_TK_API_ED25519
+          - SIGNATURE_SCHEME_TK_API_SECP256K1_EIP191
+      - name: X-Stamp-Webauthn
+        encoding: plain JSON {credentialId, authenticatorData, clientDataJson, signature}
+        signature: WebAuthn assertion over a SHA256 hash of the POST body (challenge)
+    replayProtection: timestampMs in the stamped activity body
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://api.turnkey.com/public/v1
+      documented: true
+    - protocol: SSE
+      scheme: https
+      documented: false
+      note: No Server-Sent Events streaming is documented; asynchronous activities are polled via get_activity.
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No WebSocket endpoint is documented anywhere in the Turnkey API reference as of the review date.
+  endpointsConfirmedRest:
+    - POST https://api.turnkey.com/public/v1/submit/create_sub_organization
+    - POST https://api.turnkey.com/public/v1/submit/create_wallet
+    - POST https://api.turnkey.com/public/v1/submit/create_wallet_accounts
+    - POST https://api.turnkey.com/public/v1/submit/create_private_keys
+    - POST https://api.turnkey.com/public/v1/submit/sign_transaction
+    - POST https://api.turnkey.com/public/v1/submit/sign_raw_payload
+    - POST https://api.turnkey.com/public/v1/submit/sign_raw_payloads
+    - POST https://api.turnkey.com/public/v1/submit/create_policies
+    - POST https://api.turnkey.com/public/v1/submit/create_users
+    - POST https://api.turnkey.com/public/v1/submit/create_authenticators
+    - POST https://api.turnkey.com/public/v1/submit/export_wallet
+    - POST https://api.turnkey.com/public/v1/submit/import_wallet
+    - POST https://api.turnkey.com/public/v1/query/get_activity
+    - POST https://api.turnkey.com/public/v1/query/list_activities
+    - POST https://api.turnkey.com/public/v1/query/list_wallets
+    - POST https://api.turnkey.com/public/v1/query/get_wallet
+    - POST https://api.turnkey.com/public/v1/query/list_wallet_accounts
+    - POST https://api.turnkey.com/public/v1/query/list_private_keys
+    - POST https://api.turnkey.com/public/v1/query/list_users
+    - POST https://api.turnkey.com/public/v1/query/list_policies
+    - POST https://api.turnkey.com/public/v1/query/whoami
+sources:
+  - url: https://docs.turnkey.com/api-introduction
+    type: Documentation
+    note: States all API calls are HTTP POST requests carrying an X-Stamp digital signature header; no WebSocket.
+  - url: https://docs.turnkey.com/api-reference/overview/stamps
+    type: Documentation
+    note: Defines X-Stamp (base64URL JSON publicKey/signature/scheme) and X-Stamp-Webauthn header formats and signature schemes.
+  - url: https://docs.turnkey.com/api-reference/activities/overview
+    type: APIReference
+    note: Activities are submit (mutation) endpoints under /public/v1/submit; queries are read endpoints under /public/v1/query.
+  - url: https://www.turnkey.com/pricing
+    type: Pricing
+    note: Per-signature pricing tiers (Free, PAYG, Pro, Enterprise) with wallet caps.
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No WebSocket or SSE protocol surface exists, so no AsyncAPI document was
+    authored. The apis.yml catalogs the REST surface as five sub-APIs
+    (Organizations & Sub-Organizations, Wallets, Private Keys, Signing &
+    Activities, Users/Policies/Authenticators) and the OpenAPI document
+    captures the real query/submit endpoints plus the X-Stamp request-
+    stamping security scheme.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

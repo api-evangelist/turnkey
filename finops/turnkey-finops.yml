@@ -1,0 +1,91 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Turnkey
+providerId: turnkey
+created: '2026-06-20'
+modified: '2026-06-20'
+reconciled: true
+tags:
+- Crypto
+- Wallets
+- Key Management
+- Signing
+- Secure Enclaves
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of Turnkey spend. Turnkey bills primarily per signature (per
+  transaction) against a declining per-signature rate that depends on plan
+  tier (PAYG $0.10, Pro $0.05, Enterprise as low as $0.0015), plus a $99/month
+  minimum on Pro. The Free tier covers 100 wallets and 25 free signatures per
+  month. Wallet count is plan-capped rather than directly metered, so the
+  dominant cost driver is signature volume.
+notes: >-
+  Per-signature rates and the monthly minimum are subject to change; verify
+  against the Turnkey pricing page during reconciliation.
+sources:
+- https://www.turnkey.com/pricing
+- https://docs.turnkey.com
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Turnkey
+serviceCategory: Security and Identity
+billingModel:
+  pricingCategory: Usage-Based
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Adjustment
+focusColumns:
+  ServiceName: Turnkey
+  ServiceCategory: Security and Identity
+  ProviderName: Turnkey
+  PublisherName: Turnkey
+  InvoiceIssuerName: Turnkey
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  PricingCategory: Usage-Based
+meters:
+- name: signatures
+  description: Signing activities (sign_transaction, sign_raw_payload(s)) billed per signature; 25/month free, then $0.0015-$0.10 per signature by tier.
+  unit: signatures
+  aggregation: sum
+  dimensions:
+  - organization
+  - subOrganization
+  - plan
+- name: wallets
+  description: Active wallets counted against the plan wallet cap (Free 100, PAYG 1,000, Pro 2,000, Enterprise unlimited).
+  unit: wallets
+  aggregation: max
+  dimensions:
+  - organization
+  - subOrganization
+- name: monthly_minimum
+  description: Flat $99/month minimum charge on the Pro plan, independent of signature volume.
+  unit: subscription
+  aggregation: max
+  dimensions:
+  - organization
+  - plan
+principles:
+- name: Visibility
+  description: Track signature volume per organization and sub-organization; signatures are the dominant cost driver.
+- name: Allocation
+  description: Map sub-organizations and wallet sets to internal cost centers / end users for chargeback.
+- name: Optimization
+  description: Batch raw payloads where possible, right-size the plan tier to signature volume, and negotiate Enterprise rates at scale (down to $0.0015/signature).
+- name: Accountability
+  description: Assign owners per sub-organization; review monthly signature spend against the $99 Pro minimum and free-signature allotment.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
