@@ -1,0 +1,28 @@
+generated: '2026-07-11'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: www.turnkey.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct  5 00:03:44 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+- host: docs.turnkey.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Aug 10 12:48:10 2026 GMT
+  hsts: true
+  hsts_max_age: 63072000
+- host: api.turnkey.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep 14 17:48:20 2026 GMT
+  hsts: null
+domains:
+- domain: turnkey.com
+  dnssec: true
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: quarantine

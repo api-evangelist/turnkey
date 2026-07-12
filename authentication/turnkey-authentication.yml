@@ -1,0 +1,27 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/turnkey-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: apiStamp
+  type: apiKey
+  in: header
+  parameter: X-Stamp
+  description: Base64URL-encoded JSON stamp `{publicKey, signature, scheme}` where `signature`
+    is a DER-encoded, hex-encoded signature over the exact JSON POST body produced by the registered
+    API key. `scheme` is one of SIGNATURE_SCHEME_TK_API_P256, SIGNATURE_SCHEME_TK_API_SECP256K1,
+    SIGNATURE_SCHEME_TK_API_ED25519, or SIGNATURE_SCHEME_TK_API_SECP256K1_EIP191. Passkey-stamped
+    requests use the alternate `X-Stamp-
+  sources:
+  - openapi/turnkey-openapi.yml
+- name: webauthnStamp
+  type: apiKey
+  in: header
+  parameter: X-Stamp-Webauthn
+  description: Plain-JSON WebAuthn assertion stamp for passkey-authenticated requests.
+  sources:
+  - openapi/turnkey-openapi.yml

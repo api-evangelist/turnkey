@@ -125,6 +125,12 @@ apis:
     providers, and the policy engine that authorizes every signing and
     administrative activity against the organization's root quorum.
 common:
+- type: VulnerabilityDisclosure
+  url: security/turnkey-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/turnkey-domain-security.yml
+- type: Authentication
+  url: authentication/turnkey-authentication.yml
 - type: GitHubOrganization
   url: https://github.com/tkhq
 - type: LinkedIn
@@ -142,3 +148,5 @@ common:
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
+- type: Blog
+  url: https://www.turnkey.com/blog
