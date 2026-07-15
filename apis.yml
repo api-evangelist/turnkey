@@ -125,6 +125,8 @@ apis:
     providers, and the policy engine that authorizes every signing and
     administrative activity against the organization's root quorum.
 common:
+- type: AgenticAccess
+  url: agentic-access/turnkey-agentic-access.yml
 - type: VulnerabilityDisclosure
   url: security/turnkey-vulnerability-disclosure.yml
 - type: DomainSecurity
