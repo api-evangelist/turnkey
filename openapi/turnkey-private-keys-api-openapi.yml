@@ -1,0 +1,125 @@
+openapi: 3.0.1
+info:
+  title: Turnkey Organizations Private Keys API
+  description: 'Turnkey is secure wallet infrastructure: an API-first key-management and signing platform that generates private keys and signs payloads inside verifiable secure enclaves (TEEs). The public API is an RPC-style REST API under https://api.turnkey.com/public/v1 split into two families - read-only `query` endpoints and state-changing `submit` activity endpoints. Every request is an HTTP POST carrying an `X-Stamp` (or `X-Stamp-Webauthn`) header containing a digital signature over the exact JSON POST body. The stamp is verified by Turnkey''s secure enclaves before the request is processed and checked against the organization''s policy engine.'
+  termsOfService: https://www.turnkey.com/legal/terms
+  contact:
+    name: Turnkey Support
+    url: https://docs.turnkey.com
+  version: '1.0'
+servers:
+- url: https://api.turnkey.com
+security:
+- apiStamp: []
+tags:
+- name: Private Keys
+  description: Standalone raw private keys.
+paths:
+  /public/v1/submit/create_private_keys:
+    post:
+      operationId: createPrivateKeys
+      tags:
+      - Private Keys
+      summary: Create private keys
+      description: Generates one or more standalone raw private keys inside the enclave. Activity type ACTIVITY_TYPE_CREATE_PRIVATE_KEYS_V2.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitActivityEnvelope'
+      responses:
+        '200':
+          description: Activity accepted/completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityResponse'
+  /public/v1/query/list_private_keys:
+    post:
+      operationId: listPrivateKeys
+      tags:
+      - Private Keys
+      summary: List private keys
+      description: Lists standalone private keys in an organization.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationScopedQuery'
+      responses:
+        '200':
+          description: List of private keys.
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  schemas:
+    ActivityResponse:
+      type: object
+      description: Standard activity envelope returned by submit and query endpoints.
+      properties:
+        activity:
+          type: object
+          properties:
+            id:
+              type: string
+            organizationId:
+              type: string
+            status:
+              type: string
+              enum:
+              - ACTIVITY_STATUS_CREATED
+              - ACTIVITY_STATUS_PENDING
+              - ACTIVITY_STATUS_COMPLETED
+              - ACTIVITY_STATUS_FAILED
+              - ACTIVITY_STATUS_CONSENSUS_NEEDED
+              - ACTIVITY_STATUS_REJECTED
+            type:
+              type: string
+            result:
+              type: object
+              description: Activity-specific result, e.g. createWalletResult {walletId, addresses[]} or signTransactionResult {signedTransaction} or signRawPayloadResult {r, s, v}.
+    OrganizationScopedQuery:
+      type: object
+      required:
+      - organizationId
+      properties:
+        organizationId:
+          type: string
+    SubmitActivityEnvelope:
+      type: object
+      description: Common envelope for all submit (mutation) activities. The `type` selects the activity and `parameters` carries the activity-specific body.
+      required:
+      - type
+      - timestampMs
+      - organizationId
+      - parameters
+      properties:
+        type:
+          type: string
+          description: The ACTIVITY_TYPE_* discriminator for this activity.
+          example: ACTIVITY_TYPE_CREATE_WALLET
+        timestampMs:
+          type: string
+          description: Client timestamp in milliseconds, replay-protected.
+          example: '1746736509954'
+        organizationId:
+          type: string
+          description: The organization or sub-organization id the activity targets.
+        parameters:
+          type: object
+          description: Activity-specific parameters.
+  securitySchemes:
+    apiStamp:
+      type: apiKey
+      in: header
+      name: X-Stamp
+      description: Base64URL-encoded JSON stamp `{publicKey, signature, scheme}` where `signature` is a DER-encoded, hex-encoded signature over the exact JSON POST body produced by the registered API key. `scheme` is one of SIGNATURE_SCHEME_TK_API_P256, SIGNATURE_SCHEME_TK_API_SECP256K1, SIGNATURE_SCHEME_TK_API_ED25519, or SIGNATURE_SCHEME_TK_API_SECP256K1_EIP191. Passkey-stamped requests use the alternate `X-Stamp-Webauthn` header carrying a WebAuthn assertion `{credentialId, authenticatorData, clientDataJson, signature}` (plain JSON, not base64URL-encoded) over a SHA256 hash of the POST body.
+    webauthnStamp:
+      type: apiKey
+      in: header
+      name: X-Stamp-Webauthn
+      description: Plain-JSON WebAuthn assertion stamp for passkey-authenticated requests.
