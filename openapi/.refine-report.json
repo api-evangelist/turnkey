@@ -1,0 +1,22 @@
+{
+  "provider": "turnkey",
+  "sources": [
+    "turnkey-organizations-api-openapi.yml",
+    "turnkey-private-keys-api-openapi.yml",
+    "turnkey-signing-api-openapi.yml",
+    "turnkey-users-policies-api-openapi.yml",
+    "turnkey-wallets-api-openapi.yml"
+  ],
+  "outputs": [
+    "turnkey-organizations-api-openapi.yml",
+    "turnkey-private-keys-api-openapi.yml",
+    "turnkey-signing-api-openapi.yml",
+    "turnkey-users-policies-api-openapi.yml",
+    "turnkey-wallets-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
