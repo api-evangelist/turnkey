@@ -1,0 +1,101 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Turnkey Organizations Signing API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Stamp",
+      "value": "{{X-Stamp}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Signing",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Sign a transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/submit/sign_transaction",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Signs an unsigned transaction with the specified wallet account or private key. Synchronous signing activity of type ACTIVITY_TYPE_SIGN_TRANSACTION_V2, policy-checked before execution."
+        },
+        {
+          "info": {
+            "name": "Sign a raw payload",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/submit/sign_raw_payload",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Signs an arbitrary payload with a wallet account address or private key, with selectable encoding and hash function. Activity type ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2."
+        },
+        {
+          "info": {
+            "name": "Sign multiple raw payloads",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/submit/sign_raw_payloads",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Signs a batch of raw payloads with a single key. Activity type ACTIVITY_TYPE_SIGN_RAW_PAYLOADS_V2."
+        },
+        {
+          "info": {
+            "name": "Get an activity",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/query/get_activity",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Fetches a single activity and its result by id."
+        },
+        {
+          "info": {
+            "name": "List activities",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/query/list_activities",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Lists activities for an organization with pagination and filters."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

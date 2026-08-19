@@ -1,0 +1,154 @@
+{
+  "item": [
+    {
+      "id": "f79a5823-bbc5-4cfe-9dcc-021c9afe1dc2",
+      "name": "Organizations",
+      "description": {
+        "content": "Root organization and sub-organization management.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4513ea18-49be-4ed4-ad82-704ef2ded4e3",
+          "name": "Create a sub-organization",
+          "request": {
+            "name": "Create a sub-organization",
+            "description": {
+              "content": "Creates an isolated sub-organization with its own root users, root quorum, and optionally an initial wallet. Submitted as an activity of type ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V7.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "submit",
+                "create_sub_organization"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"<string>\",\n  \"timestampMs\": \"<string>\",\n  \"organizationId\": \"<string>\",\n  \"parameters\": \"<object>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f0407d14-c1d6-4e99-95c8-5b7460f9aeeb",
+              "name": "Activity accepted/completed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "submit",
+                    "create_sub_organization"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Stamp",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"ACTIVITY_TYPE_CREATE_WALLET\",\n  \"timestampMs\": \"1746736509954\",\n  \"organizationId\": \"<string>\",\n  \"parameters\": \"<object>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"activity\": {\n    \"id\": \"string\",\n    \"organizationId\": \"string\",\n    \"status\": \"ACTIVITY_STATUS_COMPLETED\",\n    \"type\": \"string\",\n    \"result\": {}\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.turnkey.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Stamp"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "ff0cbcee-23e0-410b-aa07-a06aaa446816",
+    "name": "Turnkey Organizations API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Turnkey is secure wallet infrastructure: an API-first key-management and signing platform that generates private keys and signs payloads inside verifiable secure enclaves (TEEs). The public API is an RPC-style REST API under https://api.turnkey.com/public/v1 split into two families - read-only `query` endpoints and state-changing `submit` activity endpoints. Every request is an HTTP POST carrying an `X-Stamp` (or `X-Stamp-Webauthn`) header containing a digital signature over the exact JSON POST body. The stamp is verified by Turnkey's secure enclaves before the request is processed and checked against the organization's policy engine.\n\nContact Support:\n Name: Turnkey Support",
+      "type": "text/plain"
+    }
+  }
+}

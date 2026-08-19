@@ -1,0 +1,259 @@
+{
+  "item": [
+    {
+      "id": "62abc151-4015-4238-97cf-85c0abfc25bb",
+      "name": "Private Keys",
+      "description": {
+        "content": "Standalone raw private keys.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "42fd1091-99fc-464d-8536-d6c0ba30b0c5",
+          "name": "Create private keys",
+          "request": {
+            "name": "Create private keys",
+            "description": {
+              "content": "Generates one or more standalone raw private keys inside the enclave. Activity type ACTIVITY_TYPE_CREATE_PRIVATE_KEYS_V2.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "submit",
+                "create_private_keys"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"<string>\",\n  \"timestampMs\": \"<string>\",\n  \"organizationId\": \"<string>\",\n  \"parameters\": \"<object>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "46718b8e-6d78-4d1b-acc8-b73de22b93a8",
+              "name": "Activity accepted/completed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "submit",
+                    "create_private_keys"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Stamp",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"ACTIVITY_TYPE_CREATE_WALLET\",\n  \"timestampMs\": \"1746736509954\",\n  \"organizationId\": \"<string>\",\n  \"parameters\": \"<object>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"activity\": {\n    \"id\": \"string\",\n    \"organizationId\": \"string\",\n    \"status\": \"ACTIVITY_STATUS_CREATED\",\n    \"type\": \"string\",\n    \"result\": {}\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "002ee045-2c94-4cee-9a04-2f82859815ab",
+          "name": "List private keys",
+          "request": {
+            "name": "List private keys",
+            "description": {
+              "content": "Lists standalone private keys in an organization.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "query",
+                "list_private_keys"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"organizationId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7c9a6e5f-7d67-4324-8b40-cdc83c81721e",
+              "name": "List of private keys.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "query",
+                    "list_private_keys"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Stamp",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"organizationId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.turnkey.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Stamp"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "7c910eba-01d3-44ac-9b59-06e44527fd20",
+    "name": "Turnkey Organizations Private Keys API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Turnkey is secure wallet infrastructure: an API-first key-management and signing platform that generates private keys and signs payloads inside verifiable secure enclaves (TEEs). The public API is an RPC-style REST API under https://api.turnkey.com/public/v1 split into two families - read-only `query` endpoints and state-changing `submit` activity endpoints. Every request is an HTTP POST carrying an `X-Stamp` (or `X-Stamp-Webauthn`) header containing a digital signature over the exact JSON POST body. The stamp is verified by Turnkey's secure enclaves before the request is processed and checked against the organization's policy engine.\n\nContact Support:\n Name: Turnkey Support",
+      "type": "text/plain"
+    }
+  }
+}

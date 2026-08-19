@@ -1,0 +1,131 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Turnkey Organizations Wallets API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Stamp",
+      "value": "{{X-Stamp}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Wallets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a wallet",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/submit/create_wallet",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an HD wallet and derives the requested wallet accounts. Submitted as an activity of type ACTIVITY_TYPE_CREATE_WALLET."
+        },
+        {
+          "info": {
+            "name": "Create wallet accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/submit/create_wallet_accounts",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Derives additional wallet accounts from an existing wallet. Activity type ACTIVITY_TYPE_CREATE_WALLET_ACCOUNTS."
+        },
+        {
+          "info": {
+            "name": "Export a wallet",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/submit/export_wallet",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Exports a wallet's mnemonic encrypted to a caller-supplied target public key. Activity type ACTIVITY_TYPE_EXPORT_WALLET."
+        },
+        {
+          "info": {
+            "name": "Import a wallet",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/submit/import_wallet",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Imports an externally generated mnemonic into a wallet. Activity type ACTIVITY_TYPE_IMPORT_WALLET."
+        },
+        {
+          "info": {
+            "name": "List wallets",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/query/list_wallets",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Lists the wallets in an organization."
+        },
+        {
+          "info": {
+            "name": "Get a wallet",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/query/get_wallet",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Fetches a single wallet by id."
+        },
+        {
+          "info": {
+            "name": "List wallet accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/query/list_wallet_accounts",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Lists the derived accounts of a wallet."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

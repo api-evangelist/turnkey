@@ -1,0 +1,41 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Turnkey Organizations API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Stamp",
+      "value": "{{X-Stamp}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Organizations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a sub-organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.turnkey.com/public/v1/submit/create_sub_organization",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an isolated sub-organization with its own root users, root quorum, and optionally an initial wallet. Submitted as an activity of type ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V7."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
