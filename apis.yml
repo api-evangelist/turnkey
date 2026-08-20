@@ -38,6 +38,8 @@ apis:
   humanURL: https://docs.turnkey.com/concepts/organizations
   baseURL: https://api.turnkey.com/public/v1
   tags:
+  - Organization
+  tags_raw:
   - Organizations
   properties:
   - type: OpenAPI
