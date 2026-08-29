@@ -8,6 +8,18 @@ description: Turnkey is secure wallet infrastructure and a key-management / sign
   organizations and sub-organizations, wallets and wallet accounts, raw private
   keys, users, policies, and authenticators. Every request is cryptographically
   stamped (P-256 / API-key or passkey signature) and verified before execution.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: self-serve
