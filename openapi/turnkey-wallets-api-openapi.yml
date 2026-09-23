@@ -1,7 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Turnkey Organizations Wallets API
-  description: 'Turnkey is secure wallet infrastructure: an API-first key-management and signing platform that generates private keys and signs payloads inside verifiable secure enclaves (TEEs). The public API is an RPC-style REST API under https://api.turnkey.com/public/v1 split into two families - read-only `query` endpoints and state-changing `submit` activity endpoints. Every request is an HTTP POST carrying an `X-Stamp` (or `X-Stamp-Webauthn`) header containing a digital signature over the exact JSON POST body. The stamp is verified by Turnkey''s secure enclaves before the request is processed and checked against the organization''s policy engine.'
+  title: Turnkey Wallets API
+  description: 'Turnkey is secure wallet infrastructure: an API-first key-management and signing platform that generates private keys and signs payloads inside verifiable secure enclaves (TEEs).'
   termsOfService: https://www.turnkey.com/legal/terms
   contact:
     name: Turnkey Support
@@ -157,22 +157,24 @@ paths:
                 type: object
 components:
   schemas:
-    ListWalletsResponse:
+    CreateWalletRequest:
+      allOf:
+      - $ref: '#/components/schemas/SubmitActivityEnvelope'
+      - type: object
+        properties:
+          type:
+            type: string
+            enum:
+            - ACTIVITY_TYPE_CREATE_WALLET
+          parameters:
+            $ref: '#/components/schemas/CreateWalletParams'
+    OrganizationScopedQuery:
       type: object
+      required:
+      - organizationId
       properties:
-        wallets:
-          type: array
-          items:
-            type: object
-            properties:
-              walletId:
-                type: string
-              walletName:
-                type: string
-              createdAt:
-                type: object
-              updatedAt:
-                type: object
+        organizationId:
+          type: string
     WalletAccountParams:
       type: object
       required:
@@ -197,6 +199,28 @@ components:
         addressFormat:
           type: string
           example: ADDRESS_FORMAT_ETHEREUM
+    ListWalletAccountsRequest:
+      type: object
+      required:
+      - organizationId
+      - walletId
+      properties:
+        organizationId:
+          type: string
+        walletId:
+          type: string
+        paginationOptions:
+          type: object
+    GetWalletRequest:
+      type: object
+      required:
+      - organizationId
+      - walletId
+      properties:
+        organizationId:
+          type: string
+        walletId:
+          type: string
     CreateWalletParams:
       type: object
       required:
@@ -218,6 +242,62 @@ components:
           - 21
           - 24
           default: 12
+    SubmitActivityEnvelope:
+      type: object
+      description: Common envelope for all submit (mutation) activities. The `type` selects the activity and `parameters` carries the activity-specific body.
+      required:
+      - type
+      - timestampMs
+      - organizationId
+      - parameters
+      properties:
+        type:
+          type: string
+          description: The ACTIVITY_TYPE_* discriminator for this activity.
+          example: ACTIVITY_TYPE_CREATE_WALLET
+        timestampMs:
+          type: string
+          description: Client timestamp in milliseconds, replay-protected.
+          example: '1746736509954'
+        organizationId:
+          type: string
+          description: The organization or sub-organization id the activity targets.
+        parameters:
+          type: object
+          description: Activity-specific parameters.
+    CreateWalletAccountsRequest:
+      allOf:
+      - $ref: '#/components/schemas/SubmitActivityEnvelope'
+      - type: object
+        properties:
+          parameters:
+            type: object
+            required:
+            - walletId
+            - accounts
+            properties:
+              walletId:
+                type: string
+              accounts:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WalletAccountParams'
+    ListWalletsResponse:
+      type: object
+      properties:
+        wallets:
+          type: array
+          items:
+            type: object
+            properties:
+              walletId:
+                type: string
+              walletName:
+                type: string
+              createdAt:
+                type: object
+              updatedAt:
+                type: object
     ActivityResponse:
       type: object
       description: Standard activity envelope returned by submit and query endpoints.
@@ -243,86 +323,6 @@ components:
             result:
               type: object
               description: Activity-specific result, e.g. createWalletResult {walletId, addresses[]} or signTransactionResult {signedTransaction} or signRawPayloadResult {r, s, v}.
-    CreateWalletAccountsRequest:
-      allOf:
-      - $ref: '#/components/schemas/SubmitActivityEnvelope'
-      - type: object
-        properties:
-          parameters:
-            type: object
-            required:
-            - walletId
-            - accounts
-            properties:
-              walletId:
-                type: string
-              accounts:
-                type: array
-                items:
-                  $ref: '#/components/schemas/WalletAccountParams'
-    GetWalletRequest:
-      type: object
-      required:
-      - organizationId
-      - walletId
-      properties:
-        organizationId:
-          type: string
-        walletId:
-          type: string
-    ListWalletAccountsRequest:
-      type: object
-      required:
-      - organizationId
-      - walletId
-      properties:
-        organizationId:
-          type: string
-        walletId:
-          type: string
-        paginationOptions:
-          type: object
-    CreateWalletRequest:
-      allOf:
-      - $ref: '#/components/schemas/SubmitActivityEnvelope'
-      - type: object
-        properties:
-          type:
-            type: string
-            enum:
-            - ACTIVITY_TYPE_CREATE_WALLET
-          parameters:
-            $ref: '#/components/schemas/CreateWalletParams'
-    OrganizationScopedQuery:
-      type: object
-      required:
-      - organizationId
-      properties:
-        organizationId:
-          type: string
-    SubmitActivityEnvelope:
-      type: object
-      description: Common envelope for all submit (mutation) activities. The `type` selects the activity and `parameters` carries the activity-specific body.
-      required:
-      - type
-      - timestampMs
-      - organizationId
-      - parameters
-      properties:
-        type:
-          type: string
-          description: The ACTIVITY_TYPE_* discriminator for this activity.
-          example: ACTIVITY_TYPE_CREATE_WALLET
-        timestampMs:
-          type: string
-          description: Client timestamp in milliseconds, replay-protected.
-          example: '1746736509954'
-        organizationId:
-          type: string
-          description: The organization or sub-organization id the activity targets.
-        parameters:
-          type: object
-          description: Activity-specific parameters.
   securitySchemes:
     apiStamp:
       type: apiKey

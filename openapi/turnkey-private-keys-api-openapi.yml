@@ -1,7 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Turnkey Organizations Private Keys API
-  description: 'Turnkey is secure wallet infrastructure: an API-first key-management and signing platform that generates private keys and signs payloads inside verifiable secure enclaves (TEEs). The public API is an RPC-style REST API under https://api.turnkey.com/public/v1 split into two families - read-only `query` endpoints and state-changing `submit` activity endpoints. Every request is an HTTP POST carrying an `X-Stamp` (or `X-Stamp-Webauthn`) header containing a digital signature over the exact JSON POST body. The stamp is verified by Turnkey''s secure enclaves before the request is processed and checked against the organization''s policy engine.'
+  title: Turnkey Private Keys API
+  description: 'Turnkey is secure wallet infrastructure: an API-first key-management and signing platform that generates private keys and signs payloads inside verifiable secure enclaves (TEEs).'
   termsOfService: https://www.turnkey.com/legal/terms
   contact:
     name: Turnkey Support
@@ -57,6 +57,29 @@ paths:
                 type: object
 components:
   schemas:
+    SubmitActivityEnvelope:
+      type: object
+      description: Common envelope for all submit (mutation) activities. The `type` selects the activity and `parameters` carries the activity-specific body.
+      required:
+      - type
+      - timestampMs
+      - organizationId
+      - parameters
+      properties:
+        type:
+          type: string
+          description: The ACTIVITY_TYPE_* discriminator for this activity.
+          example: ACTIVITY_TYPE_CREATE_WALLET
+        timestampMs:
+          type: string
+          description: Client timestamp in milliseconds, replay-protected.
+          example: '1746736509954'
+        organizationId:
+          type: string
+          description: The organization or sub-organization id the activity targets.
+        parameters:
+          type: object
+          description: Activity-specific parameters.
     ActivityResponse:
       type: object
       description: Standard activity envelope returned by submit and query endpoints.
@@ -89,29 +112,6 @@ components:
       properties:
         organizationId:
           type: string
-    SubmitActivityEnvelope:
-      type: object
-      description: Common envelope for all submit (mutation) activities. The `type` selects the activity and `parameters` carries the activity-specific body.
-      required:
-      - type
-      - timestampMs
-      - organizationId
-      - parameters
-      properties:
-        type:
-          type: string
-          description: The ACTIVITY_TYPE_* discriminator for this activity.
-          example: ACTIVITY_TYPE_CREATE_WALLET
-        timestampMs:
-          type: string
-          description: Client timestamp in milliseconds, replay-protected.
-          example: '1746736509954'
-        organizationId:
-          type: string
-          description: The organization or sub-organization id the activity targets.
-        parameters:
-          type: object
-          description: Activity-specific parameters.
   securitySchemes:
     apiStamp:
       type: apiKey
