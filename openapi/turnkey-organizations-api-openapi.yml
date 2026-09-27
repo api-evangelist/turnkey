@@ -37,13 +37,6 @@ paths:
                 $ref: '#/components/schemas/ActivityResponse'
 components:
   schemas:
-    CreateSubOrganizationRequest:
-      allOf:
-      - $ref: '#/components/schemas/SubmitActivityEnvelope'
-      - type: object
-        properties:
-          parameters:
-            $ref: '#/components/schemas/CreateSubOrganizationParams'
     CreateSubOrganizationParams:
       type: object
       required:
@@ -62,6 +55,13 @@ components:
         wallet:
           type: object
           description: Optional initial wallet to create with the sub-organization.
+    CreateSubOrganizationRequest:
+      allOf:
+      - $ref: '#/components/schemas/SubmitActivityEnvelope'
+      - type: object
+        properties:
+          parameters:
+            $ref: '#/components/schemas/CreateSubOrganizationParams'
     ActivityResponse:
       type: object
       description: Standard activity envelope returned by submit and query endpoints.

@@ -57,29 +57,13 @@ paths:
                 type: object
 components:
   schemas:
-    SubmitActivityEnvelope:
+    OrganizationScopedQuery:
       type: object
-      description: Common envelope for all submit (mutation) activities. The `type` selects the activity and `parameters` carries the activity-specific body.
       required:
-      - type
-      - timestampMs
       - organizationId
-      - parameters
       properties:
-        type:
-          type: string
-          description: The ACTIVITY_TYPE_* discriminator for this activity.
-          example: ACTIVITY_TYPE_CREATE_WALLET
-        timestampMs:
-          type: string
-          description: Client timestamp in milliseconds, replay-protected.
-          example: '1746736509954'
         organizationId:
           type: string
-          description: The organization or sub-organization id the activity targets.
-        parameters:
-          type: object
-          description: Activity-specific parameters.
     ActivityResponse:
       type: object
       description: Standard activity envelope returned by submit and query endpoints.
@@ -105,13 +89,29 @@ components:
             result:
               type: object
               description: Activity-specific result, e.g. createWalletResult {walletId, addresses[]} or signTransactionResult {signedTransaction} or signRawPayloadResult {r, s, v}.
-    OrganizationScopedQuery:
+    SubmitActivityEnvelope:
       type: object
+      description: Common envelope for all submit (mutation) activities. The `type` selects the activity and `parameters` carries the activity-specific body.
       required:
+      - type
+      - timestampMs
       - organizationId
+      - parameters
       properties:
+        type:
+          type: string
+          description: The ACTIVITY_TYPE_* discriminator for this activity.
+          example: ACTIVITY_TYPE_CREATE_WALLET
+        timestampMs:
+          type: string
+          description: Client timestamp in milliseconds, replay-protected.
+          example: '1746736509954'
         organizationId:
           type: string
+          description: The organization or sub-organization id the activity targets.
+        parameters:
+          type: object
+          description: Activity-specific parameters.
   securitySchemes:
     apiStamp:
       type: apiKey

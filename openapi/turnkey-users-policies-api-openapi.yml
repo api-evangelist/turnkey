@@ -144,24 +144,6 @@ components:
       properties:
         organizationId:
           type: string
-    OrganizationScopedQuery:
-      type: object
-      required:
-      - organizationId
-      properties:
-        organizationId:
-          type: string
-    WhoamiResponse:
-      type: object
-      properties:
-        organizationId:
-          type: string
-        organizationName:
-          type: string
-        userId:
-          type: string
-        username:
-          type: string
     SubmitActivityEnvelope:
       type: object
       description: Common envelope for all submit (mutation) activities. The `type` selects the activity and `parameters` carries the activity-specific body.
@@ -185,6 +167,24 @@ components:
         parameters:
           type: object
           description: Activity-specific parameters.
+    WhoamiResponse:
+      type: object
+      properties:
+        organizationId:
+          type: string
+        organizationName:
+          type: string
+        userId:
+          type: string
+        username:
+          type: string
+    OrganizationScopedQuery:
+      type: object
+      required:
+      - organizationId
+      properties:
+        organizationId:
+          type: string
     ActivityResponse:
       type: object
       description: Standard activity envelope returned by submit and query endpoints.
