@@ -117,30 +117,13 @@ paths:
                 type: object
 components:
   schemas:
-    SignTransactionRequest:
-      allOf:
-      - $ref: '#/components/schemas/SubmitActivityEnvelope'
-      - type: object
-        properties:
-          parameters:
-            type: object
-            required:
-            - signWith
-            - unsignedTransaction
-            - type
-            properties:
-              signWith:
-                type: string
-                description: Wallet account address or private key id to sign with.
-              unsignedTransaction:
-                type: string
-                description: Hex-encoded unsigned transaction.
-              type:
-                type: string
-                enum:
-                - TRANSACTION_TYPE_ETHEREUM
-                - TRANSACTION_TYPE_SOLANA
-                - TRANSACTION_TYPE_TRON
+    OrganizationScopedQuery:
+      type: object
+      required:
+      - organizationId
+      properties:
+        organizationId:
+          type: string
     GetActivityRequest:
       type: object
       required:
@@ -151,61 +134,6 @@ components:
           type: string
         activityId:
           type: string
-    SubmitActivityEnvelope:
-      type: object
-      description: Common envelope for all submit (mutation) activities. The `type` selects the activity and `parameters` carries the activity-specific body.
-      required:
-      - type
-      - timestampMs
-      - organizationId
-      - parameters
-      properties:
-        type:
-          type: string
-          description: The ACTIVITY_TYPE_* discriminator for this activity.
-          example: ACTIVITY_TYPE_CREATE_WALLET
-        timestampMs:
-          type: string
-          description: Client timestamp in milliseconds, replay-protected.
-          example: '1746736509954'
-        organizationId:
-          type: string
-          description: The organization or sub-organization id the activity targets.
-        parameters:
-          type: object
-          description: Activity-specific parameters.
-    OrganizationScopedQuery:
-      type: object
-      required:
-      - organizationId
-      properties:
-        organizationId:
-          type: string
-    ActivityResponse:
-      type: object
-      description: Standard activity envelope returned by submit and query endpoints.
-      properties:
-        activity:
-          type: object
-          properties:
-            id:
-              type: string
-            organizationId:
-              type: string
-            status:
-              type: string
-              enum:
-              - ACTIVITY_STATUS_CREATED
-              - ACTIVITY_STATUS_PENDING
-              - ACTIVITY_STATUS_COMPLETED
-              - ACTIVITY_STATUS_FAILED
-              - ACTIVITY_STATUS_CONSENSUS_NEEDED
-              - ACTIVITY_STATUS_REJECTED
-            type:
-              type: string
-            result:
-              type: object
-              description: Activity-specific result, e.g. createWalletResult {walletId, addresses[]} or signTransactionResult {signedTransaction} or signRawPayloadResult {r, s, v}.
     SignRawPayloadRequest:
       allOf:
       - $ref: '#/components/schemas/SubmitActivityEnvelope'
@@ -235,6 +163,78 @@ components:
                 - HASH_FUNCTION_SHA256
                 - HASH_FUNCTION_KECCAK256
                 - HASH_FUNCTION_NOT_APPLICABLE
+    SubmitActivityEnvelope:
+      type: object
+      description: Common envelope for all submit (mutation) activities. The `type` selects the activity and `parameters` carries the activity-specific body.
+      required:
+      - type
+      - timestampMs
+      - organizationId
+      - parameters
+      properties:
+        type:
+          type: string
+          description: The ACTIVITY_TYPE_* discriminator for this activity.
+          example: ACTIVITY_TYPE_CREATE_WALLET
+        timestampMs:
+          type: string
+          description: Client timestamp in milliseconds, replay-protected.
+          example: '1746736509954'
+        organizationId:
+          type: string
+          description: The organization or sub-organization id the activity targets.
+        parameters:
+          type: object
+          description: Activity-specific parameters.
+    ActivityResponse:
+      type: object
+      description: Standard activity envelope returned by submit and query endpoints.
+      properties:
+        activity:
+          type: object
+          properties:
+            id:
+              type: string
+            organizationId:
+              type: string
+            status:
+              type: string
+              enum:
+              - ACTIVITY_STATUS_CREATED
+              - ACTIVITY_STATUS_PENDING
+              - ACTIVITY_STATUS_COMPLETED
+              - ACTIVITY_STATUS_FAILED
+              - ACTIVITY_STATUS_CONSENSUS_NEEDED
+              - ACTIVITY_STATUS_REJECTED
+            type:
+              type: string
+            result:
+              type: object
+              description: Activity-specific result, e.g. createWalletResult {walletId, addresses[]} or signTransactionResult {signedTransaction} or signRawPayloadResult {r, s, v}.
+    SignTransactionRequest:
+      allOf:
+      - $ref: '#/components/schemas/SubmitActivityEnvelope'
+      - type: object
+        properties:
+          parameters:
+            type: object
+            required:
+            - signWith
+            - unsignedTransaction
+            - type
+            properties:
+              signWith:
+                type: string
+                description: Wallet account address or private key id to sign with.
+              unsignedTransaction:
+                type: string
+                description: Hex-encoded unsigned transaction.
+              type:
+                type: string
+                enum:
+                - TRANSACTION_TYPE_ETHEREUM
+                - TRANSACTION_TYPE_SOLANA
+                - TRANSACTION_TYPE_TRON
   securitySchemes:
     apiStamp:
       type: apiKey

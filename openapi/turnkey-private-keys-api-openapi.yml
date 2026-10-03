@@ -57,13 +57,6 @@ paths:
                 type: object
 components:
   schemas:
-    OrganizationScopedQuery:
-      type: object
-      required:
-      - organizationId
-      properties:
-        organizationId:
-          type: string
     ActivityResponse:
       type: object
       description: Standard activity envelope returned by submit and query endpoints.
@@ -112,6 +105,13 @@ components:
         parameters:
           type: object
           description: Activity-specific parameters.
+    OrganizationScopedQuery:
+      type: object
+      required:
+      - organizationId
+      properties:
+        organizationId:
+          type: string
   securitySchemes:
     apiStamp:
       type: apiKey

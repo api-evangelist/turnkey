@@ -37,31 +37,6 @@ paths:
                 $ref: '#/components/schemas/ActivityResponse'
 components:
   schemas:
-    CreateSubOrganizationParams:
-      type: object
-      required:
-      - subOrganizationName
-      - rootUsers
-      - rootQuorumThreshold
-      properties:
-        subOrganizationName:
-          type: string
-        rootUsers:
-          type: array
-          items:
-            type: object
-        rootQuorumThreshold:
-          type: integer
-        wallet:
-          type: object
-          description: Optional initial wallet to create with the sub-organization.
-    CreateSubOrganizationRequest:
-      allOf:
-      - $ref: '#/components/schemas/SubmitActivityEnvelope'
-      - type: object
-        properties:
-          parameters:
-            $ref: '#/components/schemas/CreateSubOrganizationParams'
     ActivityResponse:
       type: object
       description: Standard activity envelope returned by submit and query endpoints.
@@ -110,6 +85,31 @@ components:
         parameters:
           type: object
           description: Activity-specific parameters.
+    CreateSubOrganizationParams:
+      type: object
+      required:
+      - subOrganizationName
+      - rootUsers
+      - rootQuorumThreshold
+      properties:
+        subOrganizationName:
+          type: string
+        rootUsers:
+          type: array
+          items:
+            type: object
+        rootQuorumThreshold:
+          type: integer
+        wallet:
+          type: object
+          description: Optional initial wallet to create with the sub-organization.
+    CreateSubOrganizationRequest:
+      allOf:
+      - $ref: '#/components/schemas/SubmitActivityEnvelope'
+      - type: object
+        properties:
+          parameters:
+            $ref: '#/components/schemas/CreateSubOrganizationParams'
   securitySchemes:
     apiStamp:
       type: apiKey
