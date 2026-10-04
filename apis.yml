@@ -197,6 +197,9 @@ apis:
   - type: APIReference
     url: https://docs.turnkey.com/api-reference/activities/create-policies
 common:
+- type: CapabilityMap
+  url: capabilities/turnkey-capability-edges.yml
+  name: Turnkey Business Capability Map
 - type: AgenticAccess
   url: agentic-access/turnkey-agentic-access.yml
 - type: VulnerabilityDisclosure

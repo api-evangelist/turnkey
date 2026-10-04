@@ -1,0 +1,34 @@
+slug: turnkey
+provider: Turnkey
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 2
+edges:
+- tag: Users & Policies
+  spec_file: turnkey-users-policies-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.85
+  evidence: createUsers  Create users; createAuthenticators  Create authenticators; createPolicies  Create
+    policies; whoami  Who am I
+  reason: User, authenticator and access-policy administration with identity introspection is plainly
+    identity and access management.
+- tag: Organizations
+  spec_file: turnkey-organizations-api-openapi.yml
+  capability_id: BC-4230.10
+  capability_id_l1: BC-4230
+  capability_name: Tenant Provisioning & Lifecycle
+  confidence: 0.7
+  evidence: POST /public/v1/submit/create_sub_organization  createSubOrganization  Create a sub-organization
+  reason: Creating sub-organizations in a multi-tenant key-management platform is tenant provisioning;
+    single operation keeps confidence moderate.
