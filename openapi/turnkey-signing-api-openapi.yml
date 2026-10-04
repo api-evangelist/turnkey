@@ -117,52 +117,6 @@ paths:
                 type: object
 components:
   schemas:
-    OrganizationScopedQuery:
-      type: object
-      required:
-      - organizationId
-      properties:
-        organizationId:
-          type: string
-    GetActivityRequest:
-      type: object
-      required:
-      - organizationId
-      - activityId
-      properties:
-        organizationId:
-          type: string
-        activityId:
-          type: string
-    SignRawPayloadRequest:
-      allOf:
-      - $ref: '#/components/schemas/SubmitActivityEnvelope'
-      - type: object
-        properties:
-          parameters:
-            type: object
-            required:
-            - signWith
-            - payload
-            - encoding
-            - hashFunction
-            properties:
-              signWith:
-                type: string
-              payload:
-                type: string
-              encoding:
-                type: string
-                enum:
-                - PAYLOAD_ENCODING_HEXADECIMAL
-                - PAYLOAD_ENCODING_TEXT_UTF8
-              hashFunction:
-                type: string
-                enum:
-                - HASH_FUNCTION_NO_OP
-                - HASH_FUNCTION_SHA256
-                - HASH_FUNCTION_KECCAK256
-                - HASH_FUNCTION_NOT_APPLICABLE
     SubmitActivityEnvelope:
       type: object
       description: Common envelope for all submit (mutation) activities. The `type` selects the activity and `parameters` carries the activity-specific body.
@@ -186,6 +140,13 @@ components:
         parameters:
           type: object
           description: Activity-specific parameters.
+    OrganizationScopedQuery:
+      type: object
+      required:
+      - organizationId
+      properties:
+        organizationId:
+          type: string
     ActivityResponse:
       type: object
       description: Standard activity envelope returned by submit and query endpoints.
@@ -235,6 +196,45 @@ components:
                 - TRANSACTION_TYPE_ETHEREUM
                 - TRANSACTION_TYPE_SOLANA
                 - TRANSACTION_TYPE_TRON
+    GetActivityRequest:
+      type: object
+      required:
+      - organizationId
+      - activityId
+      properties:
+        organizationId:
+          type: string
+        activityId:
+          type: string
+    SignRawPayloadRequest:
+      allOf:
+      - $ref: '#/components/schemas/SubmitActivityEnvelope'
+      - type: object
+        properties:
+          parameters:
+            type: object
+            required:
+            - signWith
+            - payload
+            - encoding
+            - hashFunction
+            properties:
+              signWith:
+                type: string
+              payload:
+                type: string
+              encoding:
+                type: string
+                enum:
+                - PAYLOAD_ENCODING_HEXADECIMAL
+                - PAYLOAD_ENCODING_TEXT_UTF8
+              hashFunction:
+                type: string
+                enum:
+                - HASH_FUNCTION_NO_OP
+                - HASH_FUNCTION_SHA256
+                - HASH_FUNCTION_KECCAK256
+                - HASH_FUNCTION_NOT_APPLICABLE
   securitySchemes:
     apiStamp:
       type: apiKey
