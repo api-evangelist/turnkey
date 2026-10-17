@@ -117,6 +117,69 @@ paths:
                 type: object
 components:
   schemas:
+    GetActivityRequest:
+      type: object
+      required:
+      - organizationId
+      - activityId
+      properties:
+        organizationId:
+          type: string
+        activityId:
+          type: string
+    SignRawPayloadRequest:
+      allOf:
+      - $ref: '#/components/schemas/SubmitActivityEnvelope'
+      - type: object
+        properties:
+          parameters:
+            type: object
+            required:
+            - signWith
+            - payload
+            - encoding
+            - hashFunction
+            properties:
+              signWith:
+                type: string
+              payload:
+                type: string
+              encoding:
+                type: string
+                enum:
+                - PAYLOAD_ENCODING_HEXADECIMAL
+                - PAYLOAD_ENCODING_TEXT_UTF8
+              hashFunction:
+                type: string
+                enum:
+                - HASH_FUNCTION_NO_OP
+                - HASH_FUNCTION_SHA256
+                - HASH_FUNCTION_KECCAK256
+                - HASH_FUNCTION_NOT_APPLICABLE
+    SignTransactionRequest:
+      allOf:
+      - $ref: '#/components/schemas/SubmitActivityEnvelope'
+      - type: object
+        properties:
+          parameters:
+            type: object
+            required:
+            - signWith
+            - unsignedTransaction
+            - type
+            properties:
+              signWith:
+                type: string
+                description: Wallet account address or private key id to sign with.
+              unsignedTransaction:
+                type: string
+                description: Hex-encoded unsigned transaction.
+              type:
+                type: string
+                enum:
+                - TRANSACTION_TYPE_ETHEREUM
+                - TRANSACTION_TYPE_SOLANA
+                - TRANSACTION_TYPE_TRON
     SubmitActivityEnvelope:
       type: object
       description: Common envelope for all submit (mutation) activities. The `type` selects the activity and `parameters` carries the activity-specific body.
@@ -172,69 +235,6 @@ components:
             result:
               type: object
               description: Activity-specific result, e.g. createWalletResult {walletId, addresses[]} or signTransactionResult {signedTransaction} or signRawPayloadResult {r, s, v}.
-    SignTransactionRequest:
-      allOf:
-      - $ref: '#/components/schemas/SubmitActivityEnvelope'
-      - type: object
-        properties:
-          parameters:
-            type: object
-            required:
-            - signWith
-            - unsignedTransaction
-            - type
-            properties:
-              signWith:
-                type: string
-                description: Wallet account address or private key id to sign with.
-              unsignedTransaction:
-                type: string
-                description: Hex-encoded unsigned transaction.
-              type:
-                type: string
-                enum:
-                - TRANSACTION_TYPE_ETHEREUM
-                - TRANSACTION_TYPE_SOLANA
-                - TRANSACTION_TYPE_TRON
-    GetActivityRequest:
-      type: object
-      required:
-      - organizationId
-      - activityId
-      properties:
-        organizationId:
-          type: string
-        activityId:
-          type: string
-    SignRawPayloadRequest:
-      allOf:
-      - $ref: '#/components/schemas/SubmitActivityEnvelope'
-      - type: object
-        properties:
-          parameters:
-            type: object
-            required:
-            - signWith
-            - payload
-            - encoding
-            - hashFunction
-            properties:
-              signWith:
-                type: string
-              payload:
-                type: string
-              encoding:
-                type: string
-                enum:
-                - PAYLOAD_ENCODING_HEXADECIMAL
-                - PAYLOAD_ENCODING_TEXT_UTF8
-              hashFunction:
-                type: string
-                enum:
-                - HASH_FUNCTION_NO_OP
-                - HASH_FUNCTION_SHA256
-                - HASH_FUNCTION_KECCAK256
-                - HASH_FUNCTION_NOT_APPLICABLE
   securitySchemes:
     apiStamp:
       type: apiKey

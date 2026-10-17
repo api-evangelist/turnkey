@@ -157,6 +157,32 @@ paths:
                 type: object
 components:
   schemas:
+    GetWalletRequest:
+      type: object
+      required:
+      - organizationId
+      - walletId
+      properties:
+        organizationId:
+          type: string
+        walletId:
+          type: string
+    ListWalletsResponse:
+      type: object
+      properties:
+        wallets:
+          type: array
+          items:
+            type: object
+            properties:
+              walletId:
+                type: string
+              walletName:
+                type: string
+              createdAt:
+                type: object
+              updatedAt:
+                type: object
     CreateWalletRequest:
       allOf:
       - $ref: '#/components/schemas/SubmitActivityEnvelope'
@@ -222,6 +248,18 @@ components:
       properties:
         organizationId:
           type: string
+    ListWalletAccountsRequest:
+      type: object
+      required:
+      - organizationId
+      - walletId
+      properties:
+        organizationId:
+          type: string
+        walletId:
+          type: string
+        paginationOptions:
+          type: object
     CreateWalletParams:
       type: object
       required:
@@ -285,44 +323,6 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/WalletAccountParams'
-    ListWalletAccountsRequest:
-      type: object
-      required:
-      - organizationId
-      - walletId
-      properties:
-        organizationId:
-          type: string
-        walletId:
-          type: string
-        paginationOptions:
-          type: object
-    ListWalletsResponse:
-      type: object
-      properties:
-        wallets:
-          type: array
-          items:
-            type: object
-            properties:
-              walletId:
-                type: string
-              walletName:
-                type: string
-              createdAt:
-                type: object
-              updatedAt:
-                type: object
-    GetWalletRequest:
-      type: object
-      required:
-      - organizationId
-      - walletId
-      properties:
-        organizationId:
-          type: string
-        walletId:
-          type: string
   securitySchemes:
     apiStamp:
       type: apiKey

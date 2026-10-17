@@ -137,6 +137,17 @@ paths:
                 $ref: '#/components/schemas/WhoamiResponse'
 components:
   schemas:
+    WhoamiResponse:
+      type: object
+      properties:
+        organizationId:
+          type: string
+        organizationName:
+          type: string
+        userId:
+          type: string
+        username:
+          type: string
     SubmitActivityEnvelope:
       type: object
       description: Common envelope for all submit (mutation) activities. The `type` selects the activity and `parameters` carries the activity-specific body.
@@ -161,6 +172,13 @@ components:
           type: object
           description: Activity-specific parameters.
     OrganizationScopedQuery:
+      type: object
+      required:
+      - organizationId
+      properties:
+        organizationId:
+          type: string
+    WhoamiRequest:
       type: object
       required:
       - organizationId
@@ -192,24 +210,6 @@ components:
             result:
               type: object
               description: Activity-specific result, e.g. createWalletResult {walletId, addresses[]} or signTransactionResult {signedTransaction} or signRawPayloadResult {r, s, v}.
-    WhoamiResponse:
-      type: object
-      properties:
-        organizationId:
-          type: string
-        organizationName:
-          type: string
-        userId:
-          type: string
-        username:
-          type: string
-    WhoamiRequest:
-      type: object
-      required:
-      - organizationId
-      properties:
-        organizationId:
-          type: string
   securitySchemes:
     apiStamp:
       type: apiKey
