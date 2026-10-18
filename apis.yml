@@ -35,6 +35,12 @@ accessModel:
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/turnkey.png
 tags:
+- Cryptocurrency
+- Wallets
+- Key Management
+- Signing
+- Secure Enclaves
+tags_raw:
 - Crypto
 - Wallets
 - Key Management
