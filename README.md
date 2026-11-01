@@ -1,4 +1,4 @@
-# Turnkey (turnkey)
+# Turnkey
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,139 +66,124 @@
 
 Turnkey is secure wallet infrastructure and a key-management / signing platform for crypto. Its API-first platform runs private key generation and signing inside verifiable secure enclaves (TEEs), exposing an RPC-style REST API for organizations and sub-organizations, wallets and wallet accounts, raw private keys, users, policies, and authenticators. Every request is cryptographically stamped (P-256 / API-key or passkey signature) and verified before execution.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/turnkey/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/turnkey/refs/heads/main/apis.yml)
+**Areas:** Cryptocurrency · Wallets · Key Management · Signing · Secure Enclaves
 
-## Tags
+## Turnkey on APIs.io
 
-- Crypto
-- Wallets
-- Key Management
-- Signing
-- Secure Enclaves
+Everything profiled for Turnkey is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/turnkey/](https://apis.io/providers/turnkey/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (5)
 
-- **Created:** 2026-06-20
-- **Modified:** 2026-06-20
+- [Turnkey Organizations API](https://apis.io/apis/turnkey/turnkey-organizations-api/) — Root organization and sub-organization management.
+- [Turnkey Private Keys API](https://apis.io/apis/turnkey/turnkey-private-keys-api/) — Standalone raw private keys.
+- [Turnkey Signing API](https://apis.io/apis/turnkey/turnkey-signing-api/) — Transaction and raw payload signing activities.
+- [Turnkey Users & Policies API](https://apis.io/apis/turnkey/turnkey-users-policies-api/) — Users, authenticators, API keys, and the policy engine.
+- [Turnkey Wallets API](https://apis.io/apis/turnkey/turnkey-wallets-api/) — HD wallets and wallet accounts.
 
-## APIs
+### Published properties
 
-### Turnkey Organizations & Sub-Organizations API
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-Create and manage the root organization and isolated sub-organizations, each with their own root quorum, users, policies, and wallets. The primary multi-tenant primitive for embedding wallets per end user.
+#### Agentic access (1)
 
-- **Human URL:** [https://docs.turnkey.com/concepts/organizations](https://docs.turnkey.com/concepts/organizations)
-- **Base URL:** `https://api.turnkey.com/public/v1`
+Which operations an agent can call, which act, and which need a human in the loop.
 
-#### Tags
+- [Turnkey Agentic Access](https://apis.io/agentic-access/turnkey/turnkey-agentic-access/)
 
-- Organizations
-- Sub-Organizations
-- Tenancy
+#### Collections (6)
 
-#### Properties
+Postman and Open Collection request collections.
 
-- [Documentation](https://docs.turnkey.com/concepts/sub-organizations)
-- [API Reference](https://docs.turnkey.com/api-reference/activities/create-sub-organization)
-- [OpenAPI](openapi/turnkey-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/turnkey.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/turnkey.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [Turnkey API](https://apis.io/collections/turnkey/open-turnkey/)
+- [Turnkey Organizations API](https://apis.io/collections/turnkey/open-turnkey-organizations-api/)
+- [Turnkey Organizations Private Keys API](https://apis.io/collections/turnkey/open-turnkey-private-keys-api/)
+- [Turnkey Organizations Signing API](https://apis.io/collections/turnkey/open-turnkey-signing-api/)
+- [Turnkey Organizations Users & Policies API](https://apis.io/collections/turnkey/open-turnkey-users-policies-api/)
+- [Turnkey Organizations Wallets API](https://apis.io/collections/turnkey/open-turnkey-wallets-api/)
 
-### Turnkey Wallets API
+#### Security (3)
 
-Create HD wallets and derive multi-chain wallet accounts across secp256k1, ed25519, and P-256 curves (Ethereum, Bitcoin, Solana, and more), plus import and export of seed phrases inside the secure enclave.
+Authentication, trust centre, and vulnerability disclosure.
 
-- **Human URL:** [https://docs.turnkey.com/concepts/wallets](https://docs.turnkey.com/concepts/wallets)
-- **Base URL:** `https://api.turnkey.com/public/v1`
+- [Turnkey Authentication](https://apis.io/security/turnkey/turnkey-authentication/)
+- [Turnkey Domain Security](https://apis.io/security/turnkey/turnkey-domain-security/)
+- [Turnkey Vulnerability Disclosure](https://apis.io/security/turnkey/turnkey-vulnerability-disclosure/)
 
-#### Tags
+#### Plans and pricing (1)
 
-- Wallets
-- Wallet Accounts
-- HD Wallets
+Published plans, tiers and prices.
 
-#### Properties
+- [Turnkey Plans Pricing](https://apis.io/plans/turnkey/turnkey-plans-pricing/)
 
-- [Documentation](https://docs.turnkey.com/concepts/wallets)
-- [API Reference](https://docs.turnkey.com/api-reference/activities/create-wallet)
-- [OpenAPI](openapi/turnkey-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/turnkey.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/turnkey.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+#### Rate limits (1)
 
-### Turnkey Private Keys API
+Published request limits.
 
-Generate, tag, import, and export standalone raw private keys managed inside Turnkey's secure enclaves, independent of HD wallet derivation, with curve and address-format selection.
+- [Turnkey Rate Limits](https://apis.io/rate-limits/turnkey/turnkey-rate-limits/)
 
-- **Human URL:** [https://docs.turnkey.com/concepts/private-keys](https://docs.turnkey.com/concepts/private-keys)
-- **Base URL:** `https://api.turnkey.com/public/v1`
+#### FinOps (1)
 
-#### Tags
+What the API costs to run, by operation.
 
-- Private Keys
-- Import
-- Export
+- [Turnkey Finops](https://apis.io/finops/turnkey/turnkey-finops/)
 
-#### Properties
+## Where to find this API
 
-- [Documentation](https://docs.turnkey.com/concepts/private-keys)
-- [API Reference](https://docs.turnkey.com/api-reference/activities/create-private-keys)
-- [OpenAPI](openapi/turnkey-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/turnkey.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/turnkey.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-### Turnkey Signing & Activities API
-
-Sign transactions and raw payloads (sign_transaction, sign_raw_payload, sign_raw_payloads) with a wallet account or private key, policy-checked and executed as activities; query activity status and results.
-
-- **Human URL:** [https://docs.turnkey.com/api-reference/activities/overview](https://docs.turnkey.com/api-reference/activities/overview)
-- **Base URL:** `https://api.turnkey.com/public/v1`
-
-#### Tags
-
-- Signing
-- Transactions
-- Activities
-
-#### Properties
-
-- [Documentation](https://docs.turnkey.com/concepts/policies/overview)
-- [API Reference](https://docs.turnkey.com/api-reference/activities/sign-transaction)
-- [OpenAPI](openapi/turnkey-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/turnkey.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/turnkey.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Turnkey Users, Policies & Authenticators API
-
-Manage users, API keys, passkey/WebAuthn authenticators, OAuth providers, and the policy engine that authorizes every signing and administrative activity against the organization's root quorum.
-
-- **Human URL:** [https://docs.turnkey.com/concepts/users/introduction](https://docs.turnkey.com/concepts/users/introduction)
-- **Base URL:** `https://api.turnkey.com/public/v1`
-
-#### Tags
-
-- Users
-- Policies
-- Authenticators
-
-#### Properties
-
-- [Documentation](https://docs.turnkey.com/concepts/policies/overview)
-- [API Reference](https://docs.turnkey.com/api-reference/activities/create-policies)
-- [OpenAPI](openapi/turnkey-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/turnkey.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/turnkey.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-## Common Properties
-
-- [GitHub Organization](https://github.com/tkhq)
-- [LinkedIn](https://www.linkedin.com/company/turnkeyhq)
 - [Website](https://www.turnkey.com)
 - [Documentation](https://docs.turnkey.com)
-- [Plans](plans/turnkey-plans-pricing.yml)
-- [Rate Limits](rate-limits/turnkey-rate-limits.yml)
-- [Fin Ops](finops/turnkey-finops.yml)
+- [GitHub](https://github.com/tkhq)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 26.5** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 48.9 |
+| Contract governance | 0.0 |
+| Operational transparency | 10.5 |
+| Developer ergonomics | 29.8 |
+| Access clarity | 7.9 |
+
+**Agent readiness 17.9** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 16.1** — Payments
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/turnkey/](https://apis.io/providers/turnkey/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Turnkey: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/turnkey/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
